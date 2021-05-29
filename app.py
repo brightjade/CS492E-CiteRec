@@ -24,16 +24,18 @@ logger.addHandler(file_handler)
 # Initiate Flask
 app = Flask(__name__, static_url_path='', static_folder='web/build')
 app.secret_key = secrets.token_bytes(32)
-# CORS(app)     # turn this off in production.
+CORS(app)     # turn this off in production.
 
 @app.route('/ping')
 def ping():
+    logger.info("ping success")
     return {'success': "Success!"}
 
-@app.route('/', defaults={'path':''})
-def serve(path):
-    print("HI!")
-    # return send_from_directory(app.static_folder, 'index.html')
+# might need this in production
+# @app.route('/', defaults={'path':''})
+# def serve(path):
+#     print("HI!")
+#     return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == '__main__':
     logger.info('Starting Flask API Server.')
