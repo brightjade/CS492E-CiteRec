@@ -40,6 +40,10 @@ export class Paper {
 
     makeObservable(this);
   }
+
+  @action changeStatus(status: PaperStatus) {
+    this.status = status;
+  }
 }
 
 export class PaperStore {
@@ -93,6 +97,25 @@ export class PaperStore {
   @computed get blacklistedPapers() {
     return this.papers.filter(
       (paper) => paper.status == PaperStatus.Blacklisted
+    );
+  }
+
+  paperById(id: string) {
+    return this.papers.find((value) => value.id == id);
+  }
+
+  @action addPaper(id: string) {
+    let paperIndex = this.papers.findIndex((value) => value.id === id);
+    console.log(paperIndex);
+    let paper = this.papers[paperIndex];
+    console.log(paper);
+    this.papers[paperIndex] = new Paper(
+      this,
+      paper.name,
+      PaperStatus.Added,
+      paper.id,
+      paper.x,
+      paper.y
     );
   }
 }

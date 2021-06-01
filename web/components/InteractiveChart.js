@@ -11,7 +11,8 @@ import { makeStyles } from "@material-ui/styles";
 import { Button, Paper } from "@material-ui/core";
 
 // import { dataGenerator } from "./generator";
-import { useStores } from "../../hooks/useStores";
+import { useStores } from "../hooks/useStores";
+import { observer } from "mobx-react-lite";
 
 const chartStyles = makeStyles({
   container: {
@@ -51,19 +52,17 @@ const CustomTooltip = ({ active, payload, label }) => {
     return (
       <div className={styles.container}>
         <p className={styles.label}>{`${label} : ${payload[0].value}`}</p>
-        <p className={styles.desc}>Citation will be displayed here.</p>
+        <p className={styles.desc}>{payload[1].value}</p>
       </div>
     );
   }
   return null;
 };
 
-export default function InteractiveChart() {
-  const [selectedCitation, selectCitation] = useState("");
-  const [addedCitations, addCitation] = useState([]);
+const InteractiveChart = observer(function InteractiveChart() {
   const styles = chartStyles();
   // const data = dataGenerator(100);
-  const { papers } = useStores();
+  const { ui, papers } = useStores();
 
   return (
     <div className={styles.container}>
@@ -76,19 +75,24 @@ export default function InteractiveChart() {
             name="citation"
             data={papers.recommendedPapers}
             fill="#8884d8"
-            onClick={(p) => selectCitation(p.payload.name)}
+            onClick={(p) => {
+              console.log(p.payload);
+              ui.selectPaper(p.payload.id);
+            }}
           />
         </ScatterChart>
       </ResponsiveContainer>
       <Paper className={styles.selectedCitationContainer}>
-        {selectedCitation}
-        {selectedCitation === "" ? (
+        {ui.selectedPaper === ""
+          ? ""
+          : papers.paperById(ui.selectedPaper)?.name}
+        {ui.selectedPaper === "" ? (
           ""
         ) : (
           <div className={styles.buttonContainer}>
             <Button
               color="primary"
-              onClick={() => addCitation([...addedCitations, selectedCitation])}
+              onClick={() => papers.addPaper(ui.selectedPaper)}
             >
               ADD
             </Button>
@@ -98,12 +102,14 @@ export default function InteractiveChart() {
       </Paper>
       <br />
       <Paper className={styles.addedCitationsContainer}>
-        {addedCitations.map((item) => {
-          let citation = item;
-          return <Paper>{citation}</Paper>;
+        {papers.addedPapers.map((paper) => {
+          // let citation = item;
+          return <Paper>{paper.name}</Paper>;
         })}
       </Paper>
       <Button color="primary">SAVE</Button>
     </div>
   );
-}
+});
+
+export default InteractiveChart;
