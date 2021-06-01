@@ -1,10 +1,8 @@
-import Input from "../components/Input";
 import { Box, Button, Grid } from "@material-ui/core";
 import { Pagination } from "@material-ui/lab";
-import PaperList from "../components/PaperList";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../hooks/useStores";
-import InteractiveChart from "../interactivechart/InteractiveChart";
+import { Input, PaperList, InteractiveChart } from "../components";
 
 const Home = observer(function Home() {
   const { ui } = useStores();
@@ -36,7 +34,7 @@ const Home = observer(function Home() {
         />
       </Grid>
       <Grid item xs={4}>
-        <Box width={400} height={800}>
+        <Box>
           <InteractiveChart />
         </Box>
       </Grid>

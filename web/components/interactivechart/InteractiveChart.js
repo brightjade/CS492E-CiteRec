@@ -10,7 +10,8 @@ import {
 import { makeStyles } from "@material-ui/styles";
 import { Button, Paper } from "@material-ui/core";
 
-import { dataGenerator } from "./generator";
+// import { dataGenerator } from "./generator";
+import { useStores } from "../../hooks/useStores";
 
 const chartStyles = makeStyles({
   container: {
@@ -61,7 +62,8 @@ export default function InteractiveChart() {
   const [selectedCitation, selectCitation] = useState("");
   const [addedCitations, addCitation] = useState([]);
   const styles = chartStyles();
-  const data = dataGenerator(100);
+  // const data = dataGenerator(100);
+  const { papers } = useStores();
 
   return (
     <div className={styles.container}>
@@ -72,9 +74,9 @@ export default function InteractiveChart() {
           <Tooltip content={<CustomTooltip />} />
           <Scatter
             name="citation"
-            data={data}
+            data={papers.recommendedPapers}
             fill="#8884d8"
-            onClick={(p) => selectCitation(p.payload.z)}
+            onClick={(p) => selectCitation(p.payload.name)}
           />
         </ScatterChart>
       </ResponsiveContainer>
