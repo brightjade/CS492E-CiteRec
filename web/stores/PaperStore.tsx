@@ -27,9 +27,9 @@ export class Paper {
     store: PaperStore,
     name: string,
     status: PaperStatus,
-    id = uuidv4(),
-    x = normalDistribution(),
-    y = normalDistribution()
+    id: string,
+    x: number,
+    y: number,
   ) {
     this.store = store;
     this.status = status;
@@ -47,27 +47,7 @@ export class Paper {
 }
 
 export class PaperStore {
-  @observable papers: Paper[] = [
-    new Paper(this, "first paper", PaperStatus.Recommended),
-    new Paper(this, "second paper", PaperStatus.Recommended),
-    new Paper(this, "third paper", PaperStatus.Recommended),
-    new Paper(this, "fourth paper", PaperStatus.Recommended),
-    new Paper(this, "fifth paper", PaperStatus.Recommended),
-    new Paper(this, "sixth paper", PaperStatus.Recommended),
-    new Paper(this, "seventh paper", PaperStatus.Recommended),
-    new Paper(this, "eigth paper", PaperStatus.Recommended),
-    new Paper(this, "ninth paper", PaperStatus.Recommended),
-    new Paper(this, "tenth paper", PaperStatus.Recommended),
-    new Paper(this, "eleventh paper", PaperStatus.Recommended),
-    new Paper(this, "twelveth paper", PaperStatus.Recommended),
-    new Paper(this, "thirteenth paper", PaperStatus.Recommended),
-    new Paper(this, "fourteenth paper", PaperStatus.Recommended),
-    new Paper(this, "fifteenth paper", PaperStatus.None),
-    new Paper(this, "sixteenth paper", PaperStatus.None),
-    new Paper(this, "seventeenth paper", PaperStatus.None),
-    new Paper(this, "eigteenth paper", PaperStatus.None),
-    new Paper(this, "nineteenth paper", PaperStatus.None),
-  ];
+  @observable papers: Paper[] = [];
 
   constructor() {
     makeObservable(this);
@@ -79,10 +59,6 @@ export class PaperStore {
     let last = pageSize * pageNum;
     return this.papers.slice(first, last);
   }
-
-  // @action addPaper(name: string) {
-  //   this.papers.push(new Paper(this, name));
-  // }
 
   @computed get addedPapers() {
     return this.papers.filter((paper) => paper.status == PaperStatus.Added);
@@ -117,5 +93,30 @@ export class PaperStore {
       paper.x,
       paper.y
     );
+  }
+
+  @action clearRecommendations() {
+    this.papers = [];
+  };
+
+  @action recommendPaper(
+    id: string,
+    pid: string,
+    authors: string,
+    title: string,
+    categories: string,
+    date: string,
+    x: number,
+    y: number,
+    ) {
+    this.papers.push(
+      new Paper(
+        this,
+        title,
+        PaperStatus.Recommended,
+        id,
+        x,
+        y,
+    ));
   }
 }

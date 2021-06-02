@@ -12,6 +12,8 @@ export class UIStore {
   @observable selectedText: string = "";
   @observable pageNum: number = 1;
   @observable selectedPaper: string = "";
+  //loading
+  @observable loading: boolean = true;
   constructor() {
     makeObservable(this);
   }
@@ -26,5 +28,9 @@ export class UIStore {
 
   @action setPage(pageNum: number) {
     this.pageNum = pageNum;
+  }
+
+  @action setLoading(loading: boolean) {
+    this.loading = loading;
   }
 }

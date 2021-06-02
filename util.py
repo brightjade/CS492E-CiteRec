@@ -25,7 +25,7 @@ class TfIdf:
 
     def similarities(self, list_of_words):
         """Returns a list of all the [docname, similarity_score] pairs relative to a
-list of words.
+        list of words.
         """
 
         # building the query dictionary
