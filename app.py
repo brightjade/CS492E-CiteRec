@@ -34,7 +34,7 @@ with open('/home/nas1_userA/minseokchoi20/coursework/2021spring/cs492e/data/arxi
 
 # l2 normalize embedded vectors
 sentence_embeddings = l2_norm(sentence_embeddings)
-query = torch.tensor(model.encode('urban scene segmentation')).unsqueeze(0) # query provided by interaction
+query = torch.tensor(model.encode('Several studies tried to tackle urban scene segmentation')).unsqueeze(0) # query provided by interaction
 query = l2_norm(query)
 cos_sim = (sentence_embeddings * query).sum(dim=1)
 k=5
