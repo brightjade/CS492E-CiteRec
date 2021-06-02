@@ -57,10 +57,12 @@ print(f'sbert time consumed: {after_time - before_time}')
 
 before_time = time.time()
 pca = PCA(n_components=2, random_state=3)
-coordinate = pca.fit_transform(sentence_embeddings.detach().cpu().numpy())
+embedding = torch.cat((sentence_embeddings, query), dim=0)
+coordinate = pca.fit_transform(embedding.detach().cpu().numpy())
 after_time = time.time()
 print(f'pca time consumed: {after_time - before_time}')
 recommend_coordinate = torch.index_select(torch.tensor(coordinate), 0, index)
+print('xy coordinate:')
 print(recommend_coordinate)
 
 # UI STARTS HERE
