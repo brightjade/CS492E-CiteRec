@@ -11,7 +11,7 @@ const Home = observer(function Home() {
     ui.setPage(page);
   };
   const onRecommend = () => {
-    axios.post(`http://localhost:5000/recommend_papers`, {
+    axios.post(`http://Icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
       userInput: ui.selectedText,
       K: 20, // TODO: let user choose K
     }).then(res => {

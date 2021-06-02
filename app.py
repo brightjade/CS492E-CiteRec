@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import logging
@@ -25,7 +25,7 @@ logger.addHandler(stream_handler)
 logger.addHandler(file_handler)
 
 # Initiate Flask
-app = Flask(__name__, static_url_path='', static_folder='web/build')
+app = Flask(__name__, static_url_path='', static_folder='web/out')
 app.secret_key = secrets.token_bytes(32)
 CORS(app)     # turn this off in production.
 
@@ -35,7 +35,12 @@ def ping():
     return {'success': "Success!"}
 
 
-@app.route('/recommend_papers', methods=['POST'])
+@app.route('/', defaults={'path':''})
+def serve(path):
+    return send_from_directory(app.static_folder, 'index.html')
+
+
+@app.route('/api/recommend_papers', methods=['POST'])
 def recommend_papers():
     logger.info('Recommending Papers')
     K = request.json.get('K')
