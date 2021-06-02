@@ -61,7 +61,7 @@ coordinate = pca.fit_transform(sentence_embeddings.detach().cpu().numpy())
 after_time = time.time()
 print(f'pca time consumed: {after_time - before_time}')
 recommend_coordinate = torch.index_select(torch.tensor(coordinate), 0, index)
-pritn(recommend_coordinate)
+print(recommend_coordinate)
 
 # UI STARTS HERE
 # Create a custom logger
