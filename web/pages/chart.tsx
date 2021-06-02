@@ -1,4 +1,4 @@
-import InteractiveChart from "../interactivechart/InteractiveChart";
+import { InteractiveChart } from "../components";
 
 function Chart() {
   return <InteractiveChart></InteractiveChart>;
