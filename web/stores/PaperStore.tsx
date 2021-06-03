@@ -71,6 +71,10 @@ export class PaperStore {
   @observable pageNum: number = 1;
   @observable selectedPaper: string = "";
 
+  @computed get pageCount() {
+    return Math.floor(this.papers.length / this.pageSize) + 1;
+  }
+
   constructor() {
     makeObservable(this);
   }
@@ -93,7 +97,9 @@ export class PaperStore {
   @computed get paperList() {
     // slice(1) first to not display query on recommendation list
     let recOrAdd = this.papers.filter(
-      (paper) => paper.status == PaperStatus.Recommended
+      (paper) =>
+        paper.status == PaperStatus.Recommended ||
+        paper.status == PaperStatus.Added
     );
     let blackList = this.papers.filter(
       (paper) => paper.status == PaperStatus.Blacklisted

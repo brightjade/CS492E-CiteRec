@@ -5,10 +5,9 @@ import {
   Scatter,
   XAxis,
   YAxis,
-  Tooltip,
 } from "recharts";
 import { makeStyles } from "@material-ui/styles";
-import { Button, Paper } from "@material-ui/core";
+import { Button, Paper, Tooltip } from "@material-ui/core";
 
 // import { dataGenerator } from "./generator";
 import { useStores } from "../hooks/useStores";
@@ -49,25 +48,37 @@ const PaperDetail = observer(function PaperDetail() {
           ""
         ) : (
           <div className={styles.buttonContainer}>
-            <Button
-              color="primary"
-              onClick={() =>
-                papers.changeStatus(papers.selectedPaper, PaperStatus.Added)
-              }
+            <Tooltip
+              enterDelay={700}
+              title="Add to citation list: The recommendation list will be updated to better fit you preference"
+              arrow
             >
-              Add Citation
-            </Button>
-            <Button
-              color="secondary"
-              onClick={() =>
-                papers.changeStatus(
-                  papers.selectedPaper,
-                  PaperStatus.Blacklisted
-                )
-              }
+              <Button
+                color="primary"
+                onClick={() =>
+                  papers.changeStatus(papers.selectedPaper, PaperStatus.Added)
+                }
+              >
+                Add
+              </Button>
+            </Tooltip>
+            <Tooltip
+              enterDelay={700}
+              title="Mark as irrelevant: This paper will show up last on your recommendation list"
+              arrow
             >
-              Mark as Irrelevant
-            </Button>
+              <Button
+                color="secondary"
+                onClick={() =>
+                  papers.changeStatus(
+                    papers.selectedPaper,
+                    PaperStatus.Blacklisted
+                  )
+                }
+              >
+                Irrelevant
+              </Button>
+            </Tooltip>
           </div>
         )}
       </Paper>
