@@ -62,18 +62,18 @@ const InteractiveChart = observer(function InteractiveChart() {
         <ZAxis type="string" dataKey="name" />
         <Tooltip content={<CustomTooltip />} />
         <Legend verticalAlign="bottom" height={36} />
-        {/* <Scatter
+        <Scatter
           isAnimationActive={false}
           name="query"
           data={papers.query}
           fill={blue[300]}
-        />*/}
-        <ReferenceDot
+        />
+        {/* <ReferenceDot
           x={papers.query[0].x}
           y={papers.query[0].y}
           fill={blue[300]}
           stroke="none"
-        />
+        /> */}
         <Scatter
           isAnimationActive={false}
           name="citation"
