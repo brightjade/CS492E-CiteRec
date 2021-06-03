@@ -71,6 +71,11 @@ const InteractiveChart = observer(function InteractiveChart() {
           <XAxis type="number" dataKey="x" />
           <YAxis type="number" dataKey="y" />
           <Tooltip content={<CustomTooltip />} />
+          <Scatter 
+            name="query"
+            data={papers.query}
+            fill="#d88884"
+          />
           <Scatter
             name="citation"
             data={papers.recommendedPapers}

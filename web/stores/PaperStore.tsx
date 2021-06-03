@@ -13,6 +13,7 @@ export enum PaperStatus {
   Blacklisted,
   Recommended,
   None,
+  Query,
 }
 
 export class Paper {
@@ -57,7 +58,9 @@ export class PaperStore {
     let pageSize = 10;
     let first = pageSize * (pageNum - 1);
     let last = pageSize * pageNum;
-    return this.papers.slice(first, last);
+
+    // slice(1) first to not display query on recommendation list
+    return this.papers.slice(1).slice(first, last);
   }
 
   @computed get addedPapers() {
@@ -73,6 +76,12 @@ export class PaperStore {
   @computed get blacklistedPapers() {
     return this.papers.filter(
       (paper) => paper.status == PaperStatus.Blacklisted
+    );
+  }
+
+  @computed get query() {
+    return this.papers.filter(
+      (paper) => paper.status == PaperStatus.Query
     );
   }
 
@@ -108,6 +117,7 @@ export class PaperStore {
     date: string,
     x: number,
     y: number,
+    embedding,
     ) {
     this.papers.push(
       new Paper(
@@ -118,5 +128,24 @@ export class PaperStore {
         x,
         y,
     ));
+  }
+
+  @action addQuery(
+    id: string,
+    text: string,
+    x: number,
+    y: number,
+    embedding,
+  ) {
+    this.papers.push(
+      new Paper(
+        this,
+        text, // .slice(0, 10) + ...
+        PaperStatus.Query,
+        id,
+        x,
+        y,
+      )
+    )
   }
 }
