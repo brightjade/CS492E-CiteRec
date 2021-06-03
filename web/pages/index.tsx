@@ -11,7 +11,8 @@ const Home = observer(function Home() {
     ui.setPage(page);
   };
   const onRecommend = () => {
-    axios.post(`http://Icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
+    // axios.post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
+    axios.post(`http://localhost:5000/api/recommend_papers`, {
       userInput: ui.selectedText,
       K: 20, // TODO: let user choose K
     }).then(res => {
@@ -20,13 +21,19 @@ const Home = observer(function Home() {
       // clear previous recommendations
       papers.clearRecommendations();
 
-      // TODO: deal with query coordinates
-      console.log(res.data[0]);
+      // add query
+      papers.addQuery(
+        "0",  // reserve ID#0 for query vector
+        res.data[0].text,
+        parseFloat(res.data[0].x),
+        parseFloat(res.data[0].y),
+        res.data[0].embedding,
+      );
 
       // add recommended papers to the list
       res.data.slice(1).map((dict, idx) => {
         papers.recommendPaper(
-          idx.toString(),
+          (idx+1).toString(),
           dict.pid,
           dict.authors,
           dict.title,
@@ -34,6 +41,7 @@ const Home = observer(function Home() {
           dict.date,
           parseFloat(dict.x),
           parseFloat(dict.y),
+          dict.embedding,
         );
       })
       // ui.setLoading(false);

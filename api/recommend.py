@@ -26,6 +26,7 @@ def extract_topk_papers(user_input, K):
     # print(tfidf_recommend)
 
     ##### Sentence-BERT #####
+    # model = SentenceTransformer('cache/nli-roberta-large/')   # on deploy, use local cache folder for loading model
     model = SentenceTransformer('nli-roberta-large')
     with open('data/arxiv-embeddings.pickle', 'rb') as f:
         sentence_embeddings = pickle.load(f)
@@ -44,11 +45,12 @@ def extract_topk_papers(user_input, K):
     all_embeddings = torch.cat((sentence_embeddings, query), dim=0)
     all_coordinates = pca.fit_transform(all_embeddings.detach().cpu().numpy())
     # topk_coordinates = torch.index_select(torch.tensor(all_coordinates), dim=0, index=topk_indices)
-
+    
     # pass coordinates of query vector as well
     query_coordinates = {
         "x" : str(all_coordinates[-1][0]),
         "y" : str(all_coordinates[-1][1]),
+        "embedding": query.squeeze(0).detach().cpu().tolist(),
         "text": user_input,
     }
 
@@ -61,6 +63,7 @@ def extract_topk_papers(user_input, K):
             "date": metadata[i.item()][4],
             "x": str(all_coordinates[i.item()][0]),
             "y": str(all_coordinates[i.item()][1]),
+            "embedding": all_embeddings[i.item()].detach().cpu().tolist(),
         })
 
     return query_coordinates, topk_papers
