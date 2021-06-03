@@ -94,7 +94,7 @@ export class PaperStore {
   @observable pageNum: number = 1;
   @observable selectedPaper: string = "";
 
-  constructor(uistore: UIStore) {
+  constructor() {
     makeObservable(this);
   }
 
@@ -108,8 +108,8 @@ export class PaperStore {
 
   @computed get papersOnPage() {
     let pageSize = 10;
-    let first = pageSize * (pageNum - 1);
-    let last = pageSize * pageNum;
+    let first = pageSize * (this.pageNum - 1);
+    let last = pageSize * this.pageNum;
 
     // slice(1) first to not display query on recommendation list
     return this.papers.slice(1).slice(first, last);

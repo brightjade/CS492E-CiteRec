@@ -72,42 +72,42 @@ const Home = observer(function Home() {
             console.log(err);
           });
       });
-    return (
-      <Grid container>
-        <Grid item xs={4}>
-          <Input />
-          <Box m={2}>
-            <Grid container justify="flex-end">
-              <Button variant="contained" color="primary" onClick={onRecommend}>
-                Recommend
-              </Button>
-            </Grid>
-          </Box>
-        </Grid>
-        <Grid item xs={4}>
-          <Box>
-            <PaperList />
-          </Box>
-          <Pagination
-            page={papers.pageNum}
-            count={10}
-            onChange={onChange}
-            variant="outlined"
-            color="primary"
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <Box>
-            <div className={styles.container}>
-              <InteractiveChart />
-
-              <PaperDetail />
-            </div>
-          </Box>
-        </Grid>
-      </Grid>
-    );
   };
+  return (
+    <Grid container>
+      <Grid item xs={4}>
+        <Input />
+        <Box m={2}>
+          <Grid container justify="flex-end">
+            <Button variant="contained" color="primary" onClick={onRecommend}>
+              Recommend
+            </Button>
+          </Grid>
+        </Box>
+      </Grid>
+      <Grid item xs={4}>
+        <Box>
+          <PaperList />
+        </Box>
+        <Pagination
+          page={papers.pageNum}
+          count={10}
+          onChange={onChange}
+          variant="outlined"
+          color="primary"
+        />
+      </Grid>
+      <Grid item xs={4}>
+        <Box>
+          <div className={styles.container}>
+            <InteractiveChart />
+
+            <PaperDetail />
+          </div>
+        </Box>
+      </Grid>
+    </Grid>
+  );
 });
 
 export default Home;
