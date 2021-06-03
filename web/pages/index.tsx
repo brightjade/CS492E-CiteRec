@@ -47,7 +47,7 @@ const Home = observer(function Home() {
       ui.setLoading(true);
       axios
         // .post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
-        .post(`http://localhost:8080/api/recommend_papers`, {
+        .post(`http://localhost:5000/api/recommend_papers`, {
           userInput: ui.selectedText,
           K: ui.k, // TODO: let user choose K
         })
