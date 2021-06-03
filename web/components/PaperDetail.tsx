@@ -22,11 +22,18 @@ const chartStyles = makeStyles({
   selectedCitationContainer: {
     width: "50%",
     minHeight: "10%",
+    margin: "10px",
   },
   addedCitationsContainer: {
     width: "50%",
     height: "30%",
     overflowY: "scroll",
+    margin: "10px",
+    padding: "10px",
+  },
+  citationContainer: {
+    margin: "10px",
+    padding: "10px",
   },
   buttonContainer: {
     margin: "10px",
@@ -44,7 +51,19 @@ const PaperDetail = observer(function PaperDetail() {
         <Paper className={styles.selectedCitationContainer}>
           {papers.selectedPaper === ""
             ? ""
-            : papers.paperById(papers.selectedPaper)?.name}
+            :
+            <div className={styles.citationContainer}>
+              <b>Arxiv ID:</b> {papers.paperById(papers.selectedPaper)?.pid}
+              <br />
+              <b>Title:</b> {papers.paperById(papers.selectedPaper)?.name}
+              <br />
+              <b>Authors:</b> {papers.paperById(papers.selectedPaper)?.authors}
+              <br />
+              <b>Categories:</b> {papers.paperById(papers.selectedPaper)?.categories}
+              <br />
+              <b>Update Date:</b> {papers.paperById(papers.selectedPaper)?.date}
+            </div>
+          }
           {papers.selectedPaper === "" ? (
             ""
           ) : (

@@ -24,6 +24,10 @@ export class Paper {
   @observable status: PaperStatus;
   x: number;
   y: number;
+  pid: string;
+  authors: string;
+  date: string;
+  categories: string;
 
   constructor(
     store: PaperStore,
@@ -31,7 +35,11 @@ export class Paper {
     status: PaperStatus,
     id: string,
     x: number,
-    y: number
+    y: number,
+    pid: string,
+    authors: string,
+    date: string,
+    categories: string,
   ) {
     this.store = store;
     this.status = status;
@@ -39,6 +47,10 @@ export class Paper {
     this.id = id;
     this.x = x;
     this.y = y;
+    this.pid = pid;
+    this.authors = authors;
+    this.date = date;
+    this.categories = categories;
 
     makeObservable(this);
   }
@@ -53,21 +65,21 @@ export class PaperStore {
   neighborSize = 3;
   extraPages = 2;
   @observable papers: Paper[] = [
-    new Paper(this, "query vector", PaperStatus.Query, "1", 0.3, 0.5),
-    new Paper(this, "first paper", PaperStatus.Recommended, "2", 0.4, 0.2),
-    new Paper(this, "second paper", PaperStatus.Recommended, "3", 0.3, 0.1),
-    new Paper(this, "third paper", PaperStatus.Recommended, "4", 0.1, 0.3),
-    new Paper(this, "fourth paper", PaperStatus.Recommended, "5", 0.1, 0.5),
-    new Paper(this, "paper 5", PaperStatus.Recommended, "6", -0.5, 0.2),
-    new Paper(this, "paper 6", PaperStatus.Recommended, "7", -0.4, 0.1),
-    new Paper(this, "paper 7", PaperStatus.Recommended, "8", 0.4, 0.5),
-    new Paper(this, "paper 8", PaperStatus.Recommended, "9", -0.3, 0.25),
-    new Paper(this, "paper 9", PaperStatus.Recommended, "10", -0.1, 0.2),
-    new Paper(this, "paper 10", PaperStatus.Recommended, "11", -0.15, 0.3),
-    new Paper(this, "paper 11", PaperStatus.Recommended, "12", 0.43, 0.27),
-    new Paper(this, "paper 12", PaperStatus.Recommended, "13", 0.05, 0.17),
-    new Paper(this, "paper 13", PaperStatus.Recommended, "14", 0.4, 0.03),
-    new Paper(this, "paper 14", PaperStatus.Recommended, "15", -0.5, -0.1),
+    // new Paper(this, "query vector", PaperStatus.Query, "1", 0.3, 0.5),
+    // new Paper(this, "first paper", PaperStatus.Recommended, "2", 0.4, 0.2),
+    // new Paper(this, "second paper", PaperStatus.Recommended, "3", 0.3, 0.1),
+    // new Paper(this, "third paper", PaperStatus.Recommended, "4", 0.1, 0.3),
+    // new Paper(this, "fourth paper", PaperStatus.Recommended, "5", 0.1, 0.5),
+    // new Paper(this, "paper 5", PaperStatus.Recommended, "6", -0.5, 0.2),
+    // new Paper(this, "paper 6", PaperStatus.Recommended, "7", -0.4, 0.1),
+    // new Paper(this, "paper 7", PaperStatus.Recommended, "8", 0.4, 0.5),
+    // new Paper(this, "paper 8", PaperStatus.Recommended, "9", -0.3, 0.25),
+    // new Paper(this, "paper 9", PaperStatus.Recommended, "10", -0.1, 0.2),
+    // new Paper(this, "paper 10", PaperStatus.Recommended, "11", -0.15, 0.3),
+    // new Paper(this, "paper 11", PaperStatus.Recommended, "12", 0.43, 0.27),
+    // new Paper(this, "paper 12", PaperStatus.Recommended, "13", 0.05, 0.17),
+    // new Paper(this, "paper 13", PaperStatus.Recommended, "14", 0.4, 0.03),
+    // new Paper(this, "paper 14", PaperStatus.Recommended, "15", -0.5, -0.1),
   ];
   @observable pageNum: number = 1;
   @observable selectedPaper: string = "";
@@ -172,7 +184,11 @@ export class PaperStore {
       status,
       paper.id,
       paper.x,
-      paper.y
+      paper.y,
+      paper.pid,
+      paper.authors,
+      paper.date,
+      paper.categories,
     );
   }
 
@@ -188,7 +204,11 @@ export class PaperStore {
         PaperStatus.Recommended,
         paper.id,
         paper.x,
-        paper.y
+        paper.y,
+        paper.pid,
+        paper.authors,
+        paper.date,
+        paper.categories,
       );
     } else if (paper.status == PaperStatus.Recommended) {
       this.papers[paperIndex] = new Paper(
@@ -197,7 +217,11 @@ export class PaperStore {
         PaperStatus.Added,
         paper.id,
         paper.x,
-        paper.y
+        paper.y,
+        paper.pid,
+        paper.authors,
+        paper.date,
+        paper.categories,
       );
     }
   }
@@ -213,7 +237,19 @@ export class PaperStore {
     y: number,
     embedding
   ) {
-    this.papers.push(new Paper(this, title, PaperStatus.Recommended, id, x, y));
+    this.papers.push(
+      new Paper(
+        this,
+        title,
+        PaperStatus.Recommended,
+        id,
+        x,
+        y,
+        pid,
+        authors,
+        date,
+        categories,
+      ));
   }
 
   @action addQuery(id: string, text: string, x: number, y: number, embedding) {
@@ -224,8 +260,12 @@ export class PaperStore {
         PaperStatus.Query,
         id,
         x,
-        y
-      ),
-    ];
+        y,
+        null,
+        null,
+        null,
+        null
+      )
+    ]
   }
 }
