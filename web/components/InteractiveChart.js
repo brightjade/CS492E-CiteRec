@@ -5,6 +5,8 @@ import {
   Scatter,
   XAxis,
   YAxis,
+  ZAxis,
+  Legend,
   Tooltip,
   ReferenceDot,
 } from "recharts";
@@ -14,15 +16,21 @@ import { Button, Paper } from "@material-ui/core";
 // import { dataGenerator } from "./generator";
 import { useStores } from "../hooks/useStores";
 import { observer } from "mobx-react-lite";
+import { LocalConvenienceStoreOutlined } from "@material-ui/icons";
 import { red, green, blue } from "@material-ui/core/colors";
 
 const tooltipStyles = makeStyles({
   container: {
     backgroundColor: "white",
-    border: "solid black 1px",
+    border: "solid gray 1px",
+    borderRadius: "5px",
+    padding: "10px",
     textAlign: "center",
+    width: "200px",
   },
-  label: {},
+  label: {
+    color: "gray",
+  },
   desc: {
     color: "gray",
   },
@@ -30,12 +38,11 @@ const tooltipStyles = makeStyles({
 
 const CustomTooltip = ({ active, payload, label }) => {
   const styles = tooltipStyles();
-
   if (active && payload && payload.length) {
     return (
       <div className={styles.container}>
-        <p className={styles.label}>{`${label} : ${payload[0].value}`}</p>
-        <p className={styles.desc}>{payload[1].value}</p>
+        <p className={styles.label}>{payload[2].value}</p>
+        <p className={styles.desc}>{}</p>
       </div>
     );
   }
@@ -50,15 +57,17 @@ const InteractiveChart = observer(function InteractiveChart() {
   return (
     <ResponsiveContainer width="50%" height="50%">
       <ScatterChart>
-        <XAxis type="number" dataKey="x" />
-        <YAxis type="number" dataKey="y" />
+        <XAxis type="number" dataKey="x" tick={false} />
+        <YAxis type="number" dataKey="y" tick={false} />
+        <ZAxis type="string" dataKey="name" />
         <Tooltip content={<CustomTooltip />} />
-        <Scatter
+        <Legend verticalAlign="bottom" height={36} />
+        {/* <Scatter
           isAnimationActive={false}
           name="query"
           data={papers.query}
           fill={blue[300]}
-        />
+        />*/}
         <ReferenceDot
           x={papers.query[0].x}
           y={papers.query[0].y}
