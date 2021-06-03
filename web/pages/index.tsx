@@ -32,77 +32,82 @@ const Home = observer(function Home() {
   };
   const onRecommend = () => {
     // axios.post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
-    axios.post(`http://localhost:5000/api/recommend_papers`, {
-      userInput: ui.selectedText,
-      K: 20, // TODO: let user choose K
-    }).then(res => {
-      // ui.setLoading(true);
+    axios
+      .post(`http://localhost:5000/api/recommend_papers`, {
+        userInput: ui.selectedText,
+        K: 20, // TODO: let user choose K
+      })
+      .then((res) => {
+        // ui.setLoading(true);
 
         // clear previous recommendations
         papers.clearRecommendations();
 
-      // add query
-      papers.addQuery(
-        "0",  // reserve ID#0 for query vector
-        res.data[0].text,
-        parseFloat(res.data[0].x),
-        parseFloat(res.data[0].y),
-        res.data[0].embedding,
-      );
-
-      // add recommended papers to the list
-      res.data.slice(1).map((dict, idx) => {
-        papers.recommendPaper(
-          (idx+1).toString(),
-          dict.pid,
-          dict.authors,
-          dict.title,
-          dict.categories,
-          dict.date,
-          parseFloat(dict.x),
-          parseFloat(dict.y),
-          dict.embedding,
+        // add query
+        papers.addQuery(
+          "0", // reserve ID#0 for query vector
+          res.data[0].text,
+          parseFloat(res.data[0].x),
+          parseFloat(res.data[0].y),
+          res.data[0].embedding
         );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  return (
-    <Grid container>
-      <Grid item xs={4}>
-        <Input />
-        <Box m={2}>
-          <Grid container justify="flex-end">
-            <Button variant="contained" color="primary" onClick={onRecommend}>
-              Recommend
-            </Button>
-          </Grid>
-        </Box>
-      </Grid>
-      <Grid item xs={4}>
-        <Box>
-          <PaperList />
-        </Box>
-        <Pagination
-          page={papers.pageNum}
-          count={10}
-          onChange={onChange}
-          variant="outlined"
-          color="primary"
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <Box>
-          <div className={styles.container}>
-            <InteractiveChart />
 
-            <PaperDetail />
-          </div>
-        </Box>
+        // add recommended papers to the list
+        res.data
+          .slice(1)
+          .map((dict, idx) => {
+            papers.recommendPaper(
+              (idx + 1).toString(),
+              dict.pid,
+              dict.authors,
+              dict.title,
+              dict.categories,
+              dict.date,
+              parseFloat(dict.x),
+              parseFloat(dict.y),
+              dict.embedding
+            );
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+    return (
+      <Grid container>
+        <Grid item xs={4}>
+          <Input />
+          <Box m={2}>
+            <Grid container justify="flex-end">
+              <Button variant="contained" color="primary" onClick={onRecommend}>
+                Recommend
+              </Button>
+            </Grid>
+          </Box>
+        </Grid>
+        <Grid item xs={4}>
+          <Box>
+            <PaperList />
+          </Box>
+          <Pagination
+            page={papers.pageNum}
+            count={10}
+            onChange={onChange}
+            variant="outlined"
+            color="primary"
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <Box>
+            <div className={styles.container}>
+              <InteractiveChart />
+
+              <PaperDetail />
+            </div>
+          </Box>
+        </Grid>
       </Grid>
-    </Grid>
-  );
+    );
+  };
 });
 
 export default Home;
