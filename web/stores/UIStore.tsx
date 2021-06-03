@@ -10,8 +10,6 @@ configure({ enforceActions: "always" });
 export class UIStore {
   //selection
   @observable selectedText: string = "";
-  @observable pageNum: number = 1;
-  @observable selectedPaper: string = "";
   //loading
   @observable loading: boolean = true;
   constructor() {
@@ -20,14 +18,6 @@ export class UIStore {
 
   @action setSelectedText(selection: string) {
     this.selectedText = selection;
-  }
-
-  @action selectPaper(selectionId: string) {
-    this.selectedPaper = selectionId;
-  }
-
-  @action setPage(pageNum: number) {
-    this.pageNum = pageNum;
   }
 
   @action setLoading(loading: boolean) {

@@ -2,6 +2,7 @@
 import { observable, makeObservable, configure, computed, action } from "mobx";
 import { enableStaticRendering } from "mobx-react-lite";
 import { v4 as uuidv4 } from "uuid";
+import { UIStore } from ".";
 import { normalDistribution } from "./generator";
 // eslint-disable-next-line react-hooks/rules-of-hooks
 enableStaticRendering(typeof window === "undefined");
@@ -29,7 +30,7 @@ export class Paper {
     status: PaperStatus,
     id: string,
     x: number,
-    y: number,
+    y: number
   ) {
     this.store = store;
     this.status = status;
@@ -47,32 +48,98 @@ export class Paper {
 }
 
 export class PaperStore {
-  @observable papers: Paper[] = [];
+  @observable papers: Paper[] = [
+    new Paper(
+      this,
+      "first placeholder paper",
+      PaperStatus.Recommended,
+      "1",
+      0.3,
+      0.5
+    ),
+    new Paper(
+      this,
+      "second placeholder paper",
+      PaperStatus.Recommended,
+      "2",
+      0.4,
+      0.2
+    ),
+    new Paper(
+      this,
+      "third placeholder paper",
+      PaperStatus.Recommended,
+      "3",
+      0.3,
+      0.1
+    ),
+    new Paper(
+      this,
+      "fourth placeholder paper",
+      PaperStatus.Recommended,
+      "4",
+      0.1,
+      0.3
+    ),
+    new Paper(
+      this,
+      "fifth placeholder paper",
+      PaperStatus.Recommended,
+      "5",
+      0.1,
+      0.5
+    ),
+  ];
+  @observable pageNum: number = 1;
+  @observable selectedPaper: string = "";
 
-  constructor() {
+  constructor(uistore: UIStore) {
     makeObservable(this);
   }
 
-  papersOnPage(pageNum: number) {
+  @action selectPaper(selectionId: string) {
+    this.selectedPaper = selectionId;
+  }
+
+  @action setPage(pageNum: number) {
+    this.pageNum = pageNum;
+  }
+
+  @computed get papersOnPage() {
     let pageSize = 10;
-    let first = pageSize * (pageNum - 1);
-    let last = pageSize * pageNum;
+    let first = pageSize * (this.pageNum - 1);
+    let last = pageSize * this.pageNum;
     return this.papers.slice(first, last);
   }
 
-  @computed get addedPapers() {
+  @computed get selectedPapers() {
+    return this.papersOnPage.filter((paper) => paper.id === this.selectedPaper);
+  }
+
+  @computed get allAddedPapers() {
     return this.papers.filter((paper) => paper.status == PaperStatus.Added);
   }
 
-  @computed get recommendedPapers() {
-    return this.papers.filter(
-      (paper) => paper.status == PaperStatus.Recommended
+  @computed get addedPapersOnPage() {
+    return this.papersOnPage.filter(
+      (paper) =>
+        paper.status == PaperStatus.Added && paper.id !== this.selectedPaper
     );
   }
 
-  @computed get blacklistedPapers() {
-    return this.papers.filter(
-      (paper) => paper.status == PaperStatus.Blacklisted
+  @computed get recommendedPapersOnPage() {
+    return this.papersOnPage.filter(
+      (paper) =>
+        paper.status == PaperStatus.Recommended &&
+        paper.id !== this.selectedPaper
+    );
+  }
+
+  @computed get blacklistedPapersOnPage() {
+    return this.papersOnPage.filter(
+      (paper) =>
+        paper.status == PaperStatus.Blacklisted &&
+        paper.id !== this.selectedPaper
     );
   }
 
@@ -80,24 +147,48 @@ export class PaperStore {
     return this.papers.find((value) => value.id == id);
   }
 
-  @action addPaper(id: string) {
+  @action changeStatus(id: string, status: PaperStatus) {
     let paperIndex = this.papers.findIndex((value) => value.id === id);
-    console.log(paperIndex);
     let paper = this.papers[paperIndex];
-    console.log(paper);
     this.papers[paperIndex] = new Paper(
       this,
       paper.name,
-      PaperStatus.Added,
+      status,
       paper.id,
       paper.x,
       paper.y
     );
   }
 
+  @action togglePaper(id: string) {
+    let paperIndex = this.papers.findIndex((value) => value.id === id);
+    // console.log(paperIndex);
+    let paper = this.papers[paperIndex];
+    // console.log(paper);
+    if (paper.status == PaperStatus.Added) {
+      this.papers[paperIndex] = new Paper(
+        this,
+        paper.name,
+        PaperStatus.Recommended,
+        paper.id,
+        paper.x,
+        paper.y
+      );
+    } else if (paper.status == PaperStatus.Recommended) {
+      this.papers[paperIndex] = new Paper(
+        this,
+        paper.name,
+        PaperStatus.Added,
+        paper.id,
+        paper.x,
+        paper.y
+      );
+    }
+  }
+
   @action clearRecommendations() {
     this.papers = [];
-  };
+  }
 
   @action recommendPaper(
     id: string,
@@ -107,16 +198,8 @@ export class PaperStore {
     categories: string,
     date: string,
     x: number,
-    y: number,
-    ) {
-    this.papers.push(
-      new Paper(
-        this,
-        title,
-        PaperStatus.Recommended,
-        id,
-        x,
-        y,
-    ));
+    y: number
+  ) {
+    this.papers.push(new Paper(this, title, PaperStatus.Recommended, id, x, y));
   }
 }

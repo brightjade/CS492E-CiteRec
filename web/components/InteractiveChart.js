@@ -14,25 +14,6 @@ import { Button, Paper } from "@material-ui/core";
 import { useStores } from "../hooks/useStores";
 import { observer } from "mobx-react-lite";
 
-const chartStyles = makeStyles({
-  container: {
-    width: "1000px",
-    height: "500px",
-  },
-  selectedCitationContainer: {
-    width: "50%",
-    minHeight: "10%",
-  },
-  addedCitationsContainer: {
-    width: "50%",
-    height: "30%",
-    overflowY: "scroll",
-  },
-  buttonContainer: {
-    margin: "10px",
-  },
-});
-
 const tooltipStyles = makeStyles({
   container: {
     backgroundColor: "white",
@@ -60,55 +41,58 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 const InteractiveChart = observer(function InteractiveChart() {
-  const styles = chartStyles();
+  // const styles = chartStyles();
   // const data = dataGenerator(100);
   const { ui, papers } = useStores();
 
   return (
-    <div className={styles.container}>
-      <ResponsiveContainer width="50%" height="50%">
-        <ScatterChart>
-          <XAxis type="number" dataKey="x" />
-          <YAxis type="number" dataKey="y" />
-          <Tooltip content={<CustomTooltip />} />
-          <Scatter
-            name="citation"
-            data={papers.recommendedPapers}
-            fill="#8884d8"
-            onClick={(p) => {
-              console.log(p.payload);
-              ui.selectPaper(p.payload.id);
-            }}
-          />
-        </ScatterChart>
-      </ResponsiveContainer>
-      <Paper className={styles.selectedCitationContainer}>
-        {ui.selectedPaper === ""
-          ? ""
-          : papers.paperById(ui.selectedPaper)?.name}
-        {ui.selectedPaper === "" ? (
-          ""
-        ) : (
-          <div className={styles.buttonContainer}>
-            <Button
-              color="primary"
-              onClick={() => papers.addPaper(ui.selectedPaper)}
-            >
-              ADD
-            </Button>
-            <Button color="secondary">BLACKLIST</Button>
-          </div>
-        )}
-      </Paper>
-      <br />
-      <Paper className={styles.addedCitationsContainer}>
-        {papers.addedPapers.map((paper) => {
-          // let citation = item;
-          return <Paper>{paper.name}</Paper>;
-        })}
-      </Paper>
-      <Button color="primary">SAVE</Button>
-    </div>
+    <ResponsiveContainer width="50%" height="50%">
+      <ScatterChart>
+        <XAxis type="number" dataKey="x" />
+        <YAxis type="number" dataKey="y" />
+        <Tooltip content={<CustomTooltip />} />
+        <Scatter
+          isAnimationActive={false}
+          name="recommended"
+          data={papers.recommendedPapersOnPage}
+          fill="#8884d8"
+          onClick={(p) => {
+            console.log(p.payload);
+            papers.selectPaper(p.payload.id);
+          }}
+        />
+        <Scatter
+          isAnimationActive={false}
+          name="selected"
+          data={papers.selectedPapers}
+          fill="#000000"
+          onClick={(p) => {
+            console.log(p.payload);
+            papers.selectPaper(p.payload.id);
+          }}
+        />
+        <Scatter
+          isAnimationActive={false}
+          name="added"
+          data={papers.addedPapersOnPage}
+          fill="#00FF00"
+          onClick={(p) => {
+            console.log(p.payload);
+            papers.selectPaper(p.payload.id);
+          }}
+        />
+        <Scatter
+          isAnimationActive={false}
+          name="blacklisted"
+          data={papers.blacklistedPapersOnPage}
+          fill="#ff0000"
+          onClick={(p) => {
+            console.log(p.payload);
+            papers.selectPaper(p.payload.id);
+          }}
+        />
+      </ScatterChart>
+    </ResponsiveContainer>
   );
 });
 

@@ -8,7 +8,7 @@ const Input = observer(function Input(props) {
   const onChange = (e) => {
     ui.setSelectedText(e.target.value);
   };
-  console.log(`: ${ui.selectedText}`);
+  // console.log(`: ${ui.selectedText}`);
   return (
     <Box m={2}>
       <TextField
