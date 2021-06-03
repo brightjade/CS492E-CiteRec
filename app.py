@@ -27,7 +27,7 @@ logger.addHandler(file_handler)
 # Initiate Flask
 app = Flask(__name__, static_url_path='', static_folder='web/out')
 app.secret_key = secrets.token_bytes(32)
-CORS(app)     # turn this off in production.
+# CORS(app)     # turn this off in production.
 
 @app.route('/ping')
 def ping():

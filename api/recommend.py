@@ -26,8 +26,8 @@ def extract_topk_papers(user_input, K):
     # print(tfidf_recommend)
 
     ##### Sentence-BERT #####
-    # model = SentenceTransformer('cache/nli-roberta-large/')   # on deploy, use local cache folder for loading model
-    model = SentenceTransformer('nli-roberta-large')
+    model = SentenceTransformer('cache/nli-roberta-large/')   # on deploy, use local cache folder for loading model
+    # model = SentenceTransformer('nli-roberta-large')
     with open('data/arxiv-embeddings.pickle', 'rb') as f:
         sentence_embeddings = pickle.load(f)
 
