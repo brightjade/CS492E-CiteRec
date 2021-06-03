@@ -1,15 +1,22 @@
 # CS492E-CiteRec
 
-## ICARUS (Interactive CitAtion Recommender with User-centered System)
+## ICARUS (Interactive CitAtion Recommendation with User-centered System)
 
-### Project Summary
-When writing a research paper, it is labor-intensive to find the necessary previous papers to cite or refer to them. 
-In order to address such an issue, we propose ICARUS (Interactive CitAtion Recommender with User-centered System) which recommends previous papers that might be helpful for researchers (users) to refer to.
-The unique approach of ICARUS is that users can interactively explore the previous papers via 2D projection of them and revise the recommendations based on their own tastes. 
+The project structure is as follows:
 
-### Instruction
-1. Users type in the sentence that they need papers for recommendation in the left text box
-2. Based on the query sentence, ICARUS recommends papers to read based on Tf-Idf and Sentence BERT.
-3. While displaying the papers, ICARUS also shows the 2D projection of the papers on the right.
-4. Users can explore the papers while checking the relationships among them.
-5. Users can also add or reject the paper (noted as blacklist in ICARUS).
+- __web/__ : contains all of frontend files
+  - _components/_ : contains all React components
+    - Input.tsx : an input box for the user query
+    - InteractiveChart.js : an interactive scatterplot displaying query and recommended papers
+    - PaperList.tsx : a interactive recommendation list
+  - _pages/_ : contains all webpages
+    - index.tsx : the first and main page
+  - _stores/_ : contains and maintains states used in the React application
+    - PaperStore.tsx : states regarding papers
+    - UIStore.tsx : states regarding the general UI
+
+- __api/__ : contains all of backend logic
+  - _recommen<span>d.</span>py_ : Given a query from the user input and the user-selected K, it embeds the query using [Sentence-BERT (Reimers et al.)](https://arxiv.org/abs/1908.10084) and compute cosine similarities against paper embeddings from the [arXiv dataset](https://www.kaggle.com/Cornell-University/arxiv). Then, it outputs top K most similar papers for recommendation.
+  - (more API calls to be added)
+
+- __app&#46;py__ : declares all implemented APIs and runs the Flask application.
