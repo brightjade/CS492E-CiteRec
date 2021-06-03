@@ -6,6 +6,7 @@ import {
   XAxis,
   YAxis,
   Tooltip,
+  ReferenceDot,
 } from "recharts";
 import { makeStyles } from "@material-ui/styles";
 import { Button, Paper } from "@material-ui/core";
@@ -13,6 +14,7 @@ import { Button, Paper } from "@material-ui/core";
 // import { dataGenerator } from "./generator";
 import { useStores } from "../hooks/useStores";
 import { observer } from "mobx-react-lite";
+import { red, green, blue } from "@material-ui/core/colors";
 
 const tooltipStyles = makeStyles({
   container: {
@@ -51,11 +53,17 @@ const InteractiveChart = observer(function InteractiveChart() {
         <XAxis type="number" dataKey="x" />
         <YAxis type="number" dataKey="y" />
         <Tooltip content={<CustomTooltip />} />
-        <Scatter
+        {/* <Scatter
           isAnimationActive={false}
           name="query"
           data={papers.query}
-          fill="#d88884"
+          fill="#000000"
+        /> */}
+        <ReferenceDot
+          x={papers.query[0].x}
+          y={papers.query[0].y}
+          fill={blue[300]}
+          stroke="none"
         />
         <Scatter
           isAnimationActive={false}
@@ -90,8 +98,8 @@ const InteractiveChart = observer(function InteractiveChart() {
         <Scatter
           isAnimationActive={false}
           name="added"
-          data={papers.addedPapersOnPage}
-          fill="#00FF00"
+          data={papers.addedPapers}
+          fill={green[400]}
           onClick={(p) => {
             console.log(p.payload);
             papers.selectPaper(p.payload.id);
@@ -100,8 +108,8 @@ const InteractiveChart = observer(function InteractiveChart() {
         <Scatter
           isAnimationActive={false}
           name="irrelevant"
-          data={papers.blacklistedPapersOnPage}
-          fill="#ff0000"
+          data={papers.blacklistedPapers}
+          fill={red[400]}
           onClick={(p) => {
             console.log(p.payload);
             papers.selectPaper(p.payload.id);
