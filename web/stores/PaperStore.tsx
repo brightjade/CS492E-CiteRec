@@ -147,9 +147,7 @@ export class PaperStore {
   }
 
   @computed get query() {
-    return this.papers.filter(
-      (paper) => paper.status == PaperStatus.Query
-    );
+    return this.papers.filter((paper) => paper.status == PaperStatus.Query);
   }
 
   paperById(id: string) {
@@ -207,33 +205,13 @@ export class PaperStore {
     categories: string,
     date: string,
     x: number,
-<<<<<<< HEAD
-    y: number
+    y: number,
+    embedding
   ) {
     this.papers.push(new Paper(this, title, PaperStatus.Recommended, id, x, y));
-=======
-    y: number,
-    embedding,
-    ) {
-    this.papers.push(
-      new Paper(
-        this,
-        title,
-        PaperStatus.Recommended,
-        id,
-        x,
-        y,
-    ));
->>>>>>> 4cdf17ffcaf3719e351ced17cf3baed62e45b92d
   }
 
-  @action addQuery(
-    id: string,
-    text: string,
-    x: number,
-    y: number,
-    embedding,
-  ) {
+  @action addQuery(id: string, text: string, x: number, y: number, embedding) {
     this.papers.push(
       new Paper(
         this,
@@ -241,8 +219,8 @@ export class PaperStore {
         PaperStatus.Query,
         id,
         x,
-        y,
+        y
       )
-    )
+    );
   }
 }
