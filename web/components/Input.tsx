@@ -18,7 +18,7 @@ const Input = observer(function Input(props) {
         fullWidth
         onChange={onChange}
         rows={8}
-        defaultValue="Default Value"
+        defaultValue=""
         variant="outlined"
       />
       {/* <Typography>{ui.selectedText}</Typography> */}

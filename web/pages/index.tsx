@@ -31,46 +31,52 @@ const Home = observer(function Home() {
     papers.setPage(page);
   };
   const onRecommend = () => {
-    ui.setLoading(true);
-    // axios.post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
-    axios
-      .post(`http://localhost:8080/api/recommend_papers`, {
-        userInput: ui.selectedText,
-        K: 20, // TODO: let user choose K
-      })
-      .then((res) => {
-        ui.setLoading(false);
+    if (ui.selectedText === "") {
+      alert("You must input text for recommendations.");
+    } else if (ui.selectedText.length <= 10) {
+      alert("The query string is too short. Must be greater than 10 characters.");
+    } else{
+      ui.setLoading(true);
+      axios
+        // .post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
+        .post(`http://localhost:5000/api/recommend_papers`, {
+          userInput: ui.selectedText,
+          K: 20, // TODO: let user choose K
+        })
+        .then((res) => {
+          ui.setLoading(false);
 
-        // clear previous recommendations
-        papers.clearRecommendations();
+          // clear previous recommendations
+          papers.clearRecommendations();
 
-        // add query
-        papers.addQuery(
-          "0", // reserve ID#0 for query vector
-          res.data[0].text,
-          parseFloat(res.data[0].x),
-          parseFloat(res.data[0].y),
-          res.data[0].embedding
-        );
-
-        // add recommended papers to the list
-        res.data.slice(1).map((dict, idx) => {
-          papers.recommendPaper(
-            (idx + 1).toString(),
-            dict.pid,
-            dict.authors,
-            dict.title,
-            dict.categories,
-            dict.date,
-            parseFloat(dict.x),
-            parseFloat(dict.y),
-            dict.embedding
+          // add query
+          papers.addQuery(
+            "0", // reserve ID#0 for query vector
+            res.data[0].text,
+            parseFloat(res.data[0].x),
+            parseFloat(res.data[0].y),
+            res.data[0].embedding
           );
+
+          // add recommended papers to the list
+          res.data.slice(1).map((dict, idx) => {
+            papers.recommendPaper(
+              (idx + 1).toString(),
+              dict.pid,
+              dict.authors,
+              dict.title,
+              dict.categories,
+              dict.date,
+              parseFloat(dict.x),
+              parseFloat(dict.y),
+              dict.embedding
+            );
+          });
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    }
   };
   return (
     <Grid container>
