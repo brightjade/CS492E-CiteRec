@@ -29,6 +29,11 @@ const Home = observer(function Home() {
   const styles = chartStyles();
   const onChange = (e, page: number) => {
     papers.setPage(page);
+    // if ((papers.extraPages + page) * papers.pageSize > ui.k) {
+    //   console.log("exceeded");
+    //   ui.setK((papers.extraPages + page) * papers.pageSize);
+    //   onRecommend();
+    // }
   };
   const onRecommend = () => {
     ui.setLoading(true);
@@ -36,13 +41,13 @@ const Home = observer(function Home() {
     axios
       .post(`http://localhost:8080/api/recommend_papers`, {
         userInput: ui.selectedText,
-        K: 20, // TODO: let user choose K
+        K: ui.k, // TODO: let user choose K
       })
       .then((res) => {
         ui.setLoading(false);
 
         // clear previous recommendations
-        papers.clearRecommendations();
+        // papers.clearRecommendations();
 
         // add query
         papers.addQuery(
@@ -74,7 +79,7 @@ const Home = observer(function Home() {
   };
   return (
     <Grid container>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <Input />
         <Box m={2}>
           <Grid container justify="flex-end">
@@ -95,7 +100,7 @@ const Home = observer(function Home() {
           </Grid>
         </Box>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={5}>
         <Box height={700}>
           <PaperList />
         </Box>

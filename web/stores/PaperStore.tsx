@@ -51,6 +51,7 @@ export class Paper {
 export class PaperStore {
   pageSize = 10;
   neighborSize = 3;
+  extraPages = 3;
   @observable papers: Paper[] = [
     new Paper(this, "query vector", PaperStatus.Query, "1", 0.3, 0.5),
     new Paper(this, "first paper", PaperStatus.Recommended, "2", 0.4, 0.2),
@@ -201,10 +202,6 @@ export class PaperStore {
     }
   }
 
-  @action clearRecommendations() {
-    this.papers = [];
-  }
-
   @action recommendPaper(
     id: string,
     pid: string,
@@ -220,7 +217,7 @@ export class PaperStore {
   }
 
   @action addQuery(id: string, text: string, x: number, y: number, embedding) {
-    this.papers.push(
+    this.papers = [
       new Paper(
         this,
         text, // .slice(0, 10) + ...
@@ -228,7 +225,7 @@ export class PaperStore {
         id,
         x,
         y
-      )
-    );
+      ),
+    ];
   }
 }

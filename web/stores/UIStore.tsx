@@ -11,11 +11,15 @@ export class UIStore {
   //selection
   @observable selectedText: string = "";
   //loading
+  @observable k: number = 20;
   @observable loading: boolean = false;
   constructor() {
     makeObservable(this);
   }
 
+  @action setK(k: number) {
+    this.k = k;
+  }
   @action setSelectedText(selection: string) {
     this.selectedText = selection;
   }

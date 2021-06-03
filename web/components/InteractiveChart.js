@@ -53,12 +53,12 @@ const InteractiveChart = observer(function InteractiveChart() {
         <XAxis type="number" dataKey="x" />
         <YAxis type="number" dataKey="y" />
         <Tooltip content={<CustomTooltip />} />
-        {/* <Scatter
+        <Scatter
           isAnimationActive={false}
           name="query"
           data={papers.query}
-          fill="#000000"
-        /> */}
+          fill={blue[300]}
+        />
         <ReferenceDot
           x={papers.query[0].x}
           y={papers.query[0].y}
