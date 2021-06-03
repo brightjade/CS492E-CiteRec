@@ -45,7 +45,6 @@ const PaperList = observer(function PaperList(props) {
               disableTypography
               primary={
                 <Typography
-                  type="body2"
                   style={{
                     color: `${
                       paper.status == PaperStatus.Added
