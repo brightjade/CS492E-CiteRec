@@ -96,12 +96,12 @@ const Home = observer(function Home() {
         </Box>
       </Grid>
       <Grid item xs={4}>
-        <Box>
+        <Box height={700}>
           <PaperList />
         </Box>
         <Pagination
           page={papers.pageNum}
-          count={10}
+          count={papers.pageCount}
           onChange={onChange}
           variant="outlined"
           color="primary"
