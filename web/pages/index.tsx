@@ -31,34 +31,38 @@ const Home = observer(function Home() {
     papers.setPage(page);
   };
   const onRecommend = () => {
-    axios
-      .post(`http://192.168.219.100:8080/api/recommend_papers`, {
-        userInput: ui.selectedText,
-        K: 20, // TODO: let user choose K
-      })
-      .then((res) => {
-        // ui.setLoading(true);
+    // axios.post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
+    axios.post(`http://localhost:5000/api/recommend_papers`, {
+      userInput: ui.selectedText,
+      K: 20, // TODO: let user choose K
+    }).then(res => {
+      // ui.setLoading(true);
 
         // clear previous recommendations
         papers.clearRecommendations();
 
-        // TODO: deal with query coordinates
-        console.log(res.data[0]);
+      // add query
+      papers.addQuery(
+        "0",  // reserve ID#0 for query vector
+        res.data[0].text,
+        parseFloat(res.data[0].x),
+        parseFloat(res.data[0].y),
+        res.data[0].embedding,
+      );
 
-        // add recommended papers to the list
-        res.data.slice(1).map((dict, idx) => {
-          papers.recommendPaper(
-            idx.toString(),
-            dict.pid,
-            dict.authors,
-            dict.title,
-            dict.categories,
-            dict.date,
-            parseFloat(dict.x),
-            parseFloat(dict.y)
-          );
-        });
-        // ui.setLoading(false);
+      // add recommended papers to the list
+      res.data.slice(1).map((dict, idx) => {
+        papers.recommendPaper(
+          (idx+1).toString(),
+          dict.pid,
+          dict.authors,
+          dict.title,
+          dict.categories,
+          dict.date,
+          parseFloat(dict.x),
+          parseFloat(dict.y),
+          dict.embedding,
+        );
       })
       .catch((err) => {
         console.log(err);

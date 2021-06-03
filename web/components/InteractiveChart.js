@@ -53,6 +53,12 @@ const InteractiveChart = observer(function InteractiveChart() {
         <Tooltip content={<CustomTooltip />} />
         <Scatter
           isAnimationActive={false}
+          name="query"
+          data={papers.query}
+          fill="#d88884"
+        />
+        <Scatter
+          isAnimationActive={false}
           name="recommended"
           data={papers.recommendedPapersOnPage}
           fill="#8884d8"
