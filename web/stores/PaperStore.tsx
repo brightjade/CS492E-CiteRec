@@ -118,11 +118,11 @@ export class PaperStore {
   // @computed get neighboringPapers() {}
 
   @computed get allAddedPapers() {
-    return this.papers.filter((paper) => paper.status == PaperStatus.Added);
+    return this.paperList.filter((paper) => paper.status == PaperStatus.Added);
   }
 
-  @computed get addedPapersOnPage() {
-    return this.papersOnPage.filter(
+  @computed get addedPapers() {
+    return this.paperList.filter(
       (paper) =>
         paper.status == PaperStatus.Added && paper.id !== this.selectedPaper
     );
@@ -137,7 +137,7 @@ export class PaperStore {
   }
 
   @computed get recommendedPapersOnOtherPages() {
-    return this.papers
+    return this.paperList
       .filter((paper, index) => index < this.first || index >= this.last)
       .filter(
         (paper) =>
@@ -146,8 +146,8 @@ export class PaperStore {
       );
   }
 
-  @computed get blacklistedPapersOnPage() {
-    return this.papersOnPage.filter(
+  @computed get blacklistedPapers() {
+    return this.paperList.filter(
       (paper) =>
         paper.status == PaperStatus.Blacklisted &&
         paper.id !== this.selectedPaper
