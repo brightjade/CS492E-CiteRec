@@ -73,7 +73,7 @@ export class PaperStore {
   @observable selectedPaper: string = "";
 
   @computed get pageCount() {
-    return Math.floor(this.papers.length - 2 / this.pageSize) + 1;
+    return Math.floor((this.papers.length - 2) / this.pageSize) + 1;
   }
 
   constructor() {

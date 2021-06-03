@@ -15,7 +15,7 @@ The unique approach of ICARUS is that users can interactively explore semantical
 
 4. Users can explore the papers while checking the relationships among them. The details for the paper are shown on the right, and the user can explore the same data from both the recommendation list and the 2D projection graph. The large dot is the input vector.
 
-5. The papers are divided into pages, and the current page is highlighted in the graph as well.
+5. The papers are divided into pages, and the current page is highlighted in the graph as well. Going to later pages automatically fetches more recommendations.
    ![image1](image1.png "Recommendataion")
 6. Users can also add papers to cite, and it will show up on the list in the bottom right and appear colored on the graph and list. This will also refine the recommendation results in the later iterations.
    ![image2](image2.png "Add")

@@ -51,14 +51,20 @@ const PaperDetail = observer(function PaperDetail() {
             <div className={styles.buttonContainer}>
               <Tooltip
                 enterDelay={700}
-                title="Add to citation list: The recommendation list will be updated to better fit you preference"
+                title={
+                  papers.paperById(papers.selectedPaper)?.status ==
+                  PaperStatus.Added
+                    ? "Remove from citation list"
+                    : "Add to citation list"
+                }
                 arrow
               >
                 <Button
                   color="primary"
                   onClick={() => papers.togglePaper(papers.selectedPaper)}
                 >
-                  {papers.selectedPapers[0].status == PaperStatus.Added
+                  {papers.paperById(papers.selectedPaper)?.status ==
+                  PaperStatus.Added
                     ? "Remove"
                     : "Add"}
                 </Button>
