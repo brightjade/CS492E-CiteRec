@@ -49,47 +49,24 @@ export class Paper {
 }
 
 export class PaperStore {
+  pageSize = 10;
+  neighborSize = 3;
   @observable papers: Paper[] = [
-    new Paper(
-      this,
-      "first placeholder paper",
-      PaperStatus.Recommended,
-      "1",
-      0.3,
-      0.5
-    ),
-    new Paper(
-      this,
-      "second placeholder paper",
-      PaperStatus.Recommended,
-      "2",
-      0.4,
-      0.2
-    ),
-    new Paper(
-      this,
-      "third placeholder paper",
-      PaperStatus.Recommended,
-      "3",
-      0.3,
-      0.1
-    ),
-    new Paper(
-      this,
-      "fourth placeholder paper",
-      PaperStatus.Recommended,
-      "4",
-      0.1,
-      0.3
-    ),
-    new Paper(
-      this,
-      "fifth placeholder paper",
-      PaperStatus.Recommended,
-      "5",
-      0.1,
-      0.5
-    ),
+    new Paper(this, "query vector", PaperStatus.Query, "1", 0.3, 0.5),
+    new Paper(this, "first paper", PaperStatus.Recommended, "2", 0.4, 0.2),
+    new Paper(this, "second paper", PaperStatus.Recommended, "3", 0.3, 0.1),
+    new Paper(this, "third paper", PaperStatus.Recommended, "4", 0.1, 0.3),
+    new Paper(this, "fourth paper", PaperStatus.Recommended, "5", 0.1, 0.5),
+    new Paper(this, "paper 5", PaperStatus.Recommended, "6", -0.5, 0.2),
+    new Paper(this, "paper 6", PaperStatus.Recommended, "7", -0.4, 0.1),
+    new Paper(this, "paper 7", PaperStatus.Recommended, "8", 0.4, 0.5),
+    new Paper(this, "paper 8", PaperStatus.Recommended, "9", -0.3, 0.25),
+    new Paper(this, "paper 9", PaperStatus.Recommended, "10", -0.1, 0.2),
+    new Paper(this, "paper 10", PaperStatus.Recommended, "11", -0.15, 0.3),
+    new Paper(this, "paper 11", PaperStatus.Recommended, "12", 0.43, 0.27),
+    new Paper(this, "paper 12", PaperStatus.Recommended, "13", 0.05, 0.17),
+    new Paper(this, "paper 13", PaperStatus.Recommended, "14", 0.4, 0.03),
+    new Paper(this, "paper 14", PaperStatus.Recommended, "15", -0.5, -0.1),
   ];
   @observable pageNum: number = 1;
   @observable selectedPaper: string = "";
@@ -106,18 +83,33 @@ export class PaperStore {
     this.pageNum = pageNum;
   }
 
-  @computed get papersOnPage() {
-    let pageSize = 10;
-    let first = pageSize * (this.pageNum - 1);
-    let last = pageSize * this.pageNum;
+  @computed get first() {
+    return this.pageSize * (this.pageNum - 1);
+  }
+  @computed get last() {
+    return this.pageSize * this.pageNum;
+  }
 
+  @computed get paperList() {
     // slice(1) first to not display query on recommendation list
-    return this.papers.slice(1).slice(first, last);
+    let recOrAdd = this.papers.filter(
+      (paper) => paper.status == PaperStatus.Recommended
+    );
+    let blackList = this.papers.filter(
+      (paper) => paper.status == PaperStatus.Blacklisted
+    );
+    return recOrAdd.concat(blackList);
+  }
+
+  @computed get papersOnPage() {
+    return this.paperList.slice(this.first, this.last);
   }
 
   @computed get selectedPapers() {
-    return this.papersOnPage.filter((paper) => paper.id === this.selectedPaper);
+    return this.papers.filter((paper) => paper.id === this.selectedPaper);
   }
+
+  // @computed get neighboringPapers() {}
 
   @computed get allAddedPapers() {
     return this.papers.filter((paper) => paper.status == PaperStatus.Added);
@@ -136,6 +128,16 @@ export class PaperStore {
         paper.status == PaperStatus.Recommended &&
         paper.id !== this.selectedPaper
     );
+  }
+
+  @computed get recommendedPapersOnOtherPages() {
+    return this.papers
+      .filter((paper, index) => index < this.first || index >= this.last)
+      .filter(
+        (paper) =>
+          paper.status == PaperStatus.Recommended &&
+          paper.id !== this.selectedPaper
+      );
   }
 
   @computed get blacklistedPapersOnPage() {

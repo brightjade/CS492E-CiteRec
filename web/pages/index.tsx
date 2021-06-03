@@ -31,14 +31,15 @@ const Home = observer(function Home() {
     papers.setPage(page);
   };
   const onRecommend = () => {
+    ui.setLoading(true);
     // axios.post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
     axios
-      .post(`http://localhost:5000/api/recommend_papers`, {
+      .post(`http://localhost:8080/api/recommend_papers`, {
         userInput: ui.selectedText,
         K: 20, // TODO: let user choose K
       })
       .then((res) => {
-        // ui.setLoading(true);
+        ui.setLoading(false);
 
         // clear previous recommendations
         papers.clearRecommendations();
@@ -53,24 +54,22 @@ const Home = observer(function Home() {
         );
 
         // add recommended papers to the list
-        res.data
-          .slice(1)
-          .map((dict, idx) => {
-            papers.recommendPaper(
-              (idx + 1).toString(),
-              dict.pid,
-              dict.authors,
-              dict.title,
-              dict.categories,
-              dict.date,
-              parseFloat(dict.x),
-              parseFloat(dict.y),
-              dict.embedding
-            );
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        res.data.slice(1).map((dict, idx) => {
+          papers.recommendPaper(
+            (idx + 1).toString(),
+            dict.pid,
+            dict.authors,
+            dict.title,
+            dict.categories,
+            dict.date,
+            parseFloat(dict.x),
+            parseFloat(dict.y),
+            dict.embedding
+          );
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
   return (
@@ -79,9 +78,20 @@ const Home = observer(function Home() {
         <Input />
         <Box m={2}>
           <Grid container justify="flex-end">
-            <Button variant="contained" color="primary" onClick={onRecommend}>
-              Recommend
-            </Button>
+            {ui.loading ? (
+              <Button
+                variant="contained"
+                color="primary"
+                disabled
+                onClick={onRecommend}
+              >
+                Recommending...
+              </Button>
+            ) : (
+              <Button variant="contained" color="primary" onClick={onRecommend}>
+                Recommend
+              </Button>
+            )}
           </Grid>
         </Box>
       </Grid>

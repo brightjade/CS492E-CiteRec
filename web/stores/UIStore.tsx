@@ -11,7 +11,7 @@ export class UIStore {
   //selection
   @observable selectedText: string = "";
   //loading
-  @observable loading: boolean = true;
+  @observable loading: boolean = false;
   constructor() {
     makeObservable(this);
   }

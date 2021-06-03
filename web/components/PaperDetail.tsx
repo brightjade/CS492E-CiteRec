@@ -55,7 +55,7 @@ const PaperDetail = observer(function PaperDetail() {
                 papers.changeStatus(papers.selectedPaper, PaperStatus.Added)
               }
             >
-              ADD
+              Add Citation
             </Button>
             <Button
               color="secondary"
@@ -66,7 +66,7 @@ const PaperDetail = observer(function PaperDetail() {
                 )
               }
             >
-              BLACKLIST
+              Mark as Irrelevant
             </Button>
           </div>
         )}
