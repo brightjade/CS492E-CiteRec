@@ -7,7 +7,7 @@ import {
   YAxis,
 } from "recharts";
 import { makeStyles } from "@material-ui/styles";
-import { Button, Paper, Tooltip } from "@material-ui/core";
+import { Button, Paper, Tooltip, Box } from "@material-ui/core";
 
 // import { dataGenerator } from "./generator";
 import { useStores } from "../hooks/useStores";
@@ -40,56 +40,60 @@ const PaperDetail = observer(function PaperDetail() {
 
   return (
     <div>
-      <Paper className={styles.selectedCitationContainer}>
-        {papers.selectedPaper === ""
-          ? ""
-          : papers.paperById(papers.selectedPaper)?.name}
-        {papers.selectedPaper === "" ? (
-          ""
-        ) : (
-          <div className={styles.buttonContainer}>
-            <Tooltip
-              enterDelay={700}
-              title="Add to citation list: The recommendation list will be updated to better fit you preference"
-              arrow
-            >
-              <Button
-                color="primary"
-                onClick={() =>
-                  papers.changeStatus(papers.selectedPaper, PaperStatus.Added)
-                }
+      <Box p={2}>
+        <Paper className={styles.selectedCitationContainer}>
+          {papers.selectedPaper === ""
+            ? ""
+            : papers.paperById(papers.selectedPaper)?.name}
+          {papers.selectedPaper === "" ? (
+            ""
+          ) : (
+            <div className={styles.buttonContainer}>
+              <Tooltip
+                enterDelay={700}
+                title="Add to citation list: The recommendation list will be updated to better fit you preference"
+                arrow
               >
-                Add
-              </Button>
-            </Tooltip>
-            <Tooltip
-              enterDelay={700}
-              title="Mark as irrelevant: This paper will show up last on your recommendation list"
-              arrow
-            >
-              <Button
-                color="secondary"
-                onClick={() =>
-                  papers.changeStatus(
-                    papers.selectedPaper,
-                    PaperStatus.Blacklisted
-                  )
-                }
+                <Button
+                  color="primary"
+                  onClick={() => papers.togglePaper(papers.selectedPaper)}
+                >
+                  {papers.selectedPapers[0].status == PaperStatus.Added
+                    ? "Remove"
+                    : "Add"}
+                </Button>
+              </Tooltip>
+              <Tooltip
+                enterDelay={700}
+                title="Mark as irrelevant: This paper will show up last on your recommendation list"
+                arrow
               >
-                Irrelevant
-              </Button>
-            </Tooltip>
-          </div>
-        )}
-      </Paper>
+                <Button
+                  color="secondary"
+                  onClick={() =>
+                    papers.changeStatus(
+                      papers.selectedPaper,
+                      PaperStatus.Blacklisted
+                    )
+                  }
+                >
+                  Irrelevant
+                </Button>
+              </Tooltip>
+            </div>
+          )}
+        </Paper>
+      </Box>
       <br />
-      <Paper className={styles.addedCitationsContainer}>
-        {papers.allAddedPapers.map((paper) => {
-          // let citation = item;
-          return <Paper>{paper.name}</Paper>;
-        })}
-      </Paper>
-      <Button color="primary">SAVE</Button>
+      <Box p={2}>
+        <Paper className={styles.addedCitationsContainer}>
+          {papers.allAddedPapers.map((paper) => {
+            // let citation = item;
+            return <Box>{paper.name}</Box>;
+          })}
+        </Paper>
+        <Button color="primary">SAVE</Button>
+      </Box>
     </div>
   );
 });

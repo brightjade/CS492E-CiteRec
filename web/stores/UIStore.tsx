@@ -11,7 +11,7 @@ export class UIStore {
   //selection
   @observable selectedText: string = "";
   //loading
-  @observable k: number = 20;
+  @observable k: number = 30;
   @observable loading: boolean = false;
   constructor() {
     makeObservable(this);

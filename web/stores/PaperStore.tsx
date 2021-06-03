@@ -51,7 +51,7 @@ export class Paper {
 export class PaperStore {
   pageSize = 10;
   neighborSize = 3;
-  extraPages = 3;
+  extraPages = 2;
   @observable papers: Paper[] = [
     new Paper(this, "query vector", PaperStatus.Query, "1", 0.3, 0.5),
     new Paper(this, "first paper", PaperStatus.Recommended, "2", 0.4, 0.2),
@@ -73,7 +73,7 @@ export class PaperStore {
   @observable selectedPaper: string = "";
 
   @computed get pageCount() {
-    return Math.floor(this.papers.length / this.pageSize) + 1;
+    return Math.floor(this.papers.length - 2 / this.pageSize) + 1;
   }
 
   constructor() {

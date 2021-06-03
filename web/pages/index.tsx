@@ -29,13 +29,14 @@ const Home = observer(function Home() {
   const styles = chartStyles();
   const onChange = (e, page: number) => {
     papers.setPage(page);
-    // if ((papers.extraPages + page) * papers.pageSize > ui.k) {
-    //   console.log("exceeded");
-    //   ui.setK((papers.extraPages + page) * papers.pageSize);
-    //   onRecommend();
-    // }
+    if ((papers.extraPages + page) * papers.pageSize > ui.k) {
+      const original = ui.k;
+      ui.setK((papers.extraPages + papers.pageCount) * papers.pageSize);
+      console.log(`exceeded: ${original}`);
+      onRecommend(original);
+    }
   };
-  const onRecommend = () => {
+  const onRecommend = (original) => {
     if (ui.selectedText === "") {
       alert("You must input text for recommendations.");
     } else if (ui.selectedText.length <= 10) {
@@ -46,7 +47,7 @@ const Home = observer(function Home() {
       ui.setLoading(true);
       axios
         // .post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
-        .post(`http://localhost:5000/api/recommend_papers`, {
+        .post(`http://localhost:8080/api/recommend_papers`, {
           userInput: ui.selectedText,
           K: ui.k, // TODO: let user choose K
         })
@@ -57,18 +58,20 @@ const Home = observer(function Home() {
           // papers.clearRecommendations();
 
           // add query
-          papers.addQuery(
-            "0", // reserve ID#0 for query vector
-            res.data[0].text,
-            parseFloat(res.data[0].x),
-            parseFloat(res.data[0].y),
-            res.data[0].embedding
-          );
+          if (original == 0) {
+            papers.addQuery(
+              "0", // reserve ID#0 for query vector
+              res.data[0].text,
+              parseFloat(res.data[0].x),
+              parseFloat(res.data[0].y),
+              res.data[0].embedding
+            );
+          }
 
           // add recommended papers to the list
-          res.data.slice(1).map((dict, idx) => {
+          res.data.slice(original + 1).map((dict, idx) => {
             papers.recommendPaper(
-              (idx + 1).toString(),
+              (idx + original + 1).toString(),
               dict.pid,
               dict.authors,
               dict.title,
@@ -101,7 +104,11 @@ const Home = observer(function Home() {
                 Recommending...
               </Button>
             ) : (
-              <Button variant="contained" color="primary" onClick={onRecommend}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => onRecommend(0)}
+              >
                 Recommend
               </Button>
             )}
