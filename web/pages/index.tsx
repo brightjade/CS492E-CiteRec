@@ -13,15 +13,13 @@ import {
 
 const chartStyles = makeStyles({
   container: {
-    width: "1000px",
-    height: "500px",
+    width: "100%",
+    height: "100%",
   },
   selectedCitationContainer: {
-    width: "50%",
     minHeight: "10%",
   },
   addedCitationsContainer: {
-    width: "50%",
     height: "30%",
     overflowY: "scroll",
   },
@@ -127,19 +125,22 @@ const Home = observer(function Home() {
         />
       </Grid>
       <Grid item xs={4}>
-        {papers.papers.length == 0 ? (
+        <Box
+          p={2}
+          className={styles.container}
+          component="span"
+          display="block"
+        >
+          {/* {papers.papers.length == 0 ? (
           <Box></Box>
-        ) : (
-          <Box>
-            <div className={styles.container}>
-              <InteractiveChart />
+        ) : ( */}
+          <InteractiveChart />
 
-              <PaperDetail />
+          <PaperDetail />
 
-              <Citation />
-            </div>
-          </Box>
-        )}
+          <Citation />
+        </Box>
+        {/* )} */}
       </Grid>
     </Grid>
   );

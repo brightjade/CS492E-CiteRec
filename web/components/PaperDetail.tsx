@@ -8,21 +8,8 @@ import { observer } from "mobx-react-lite";
 import { PaperStatus } from "../stores/PaperStore";
 
 const chartStyles = makeStyles({
-  container: {
-    width: "1000px",
-    height: "500px",
-  },
   selectedCitationContainer: {
-    width: "50%",
     minHeight: "10%",
-    margin: "10px",
-  },
-  addedCitationsContainer: {
-    width: "50%",
-    height: "30%",
-    overflowY: "scroll",
-    margin: "10px",
-    padding: "10px",
   },
   citationContainer: {
     margin: "10px",
@@ -30,6 +17,7 @@ const chartStyles = makeStyles({
   },
   buttonContainer: {
     margin: "10px",
+    paddingBottom: "8px",
   },
 });
 
@@ -72,7 +60,11 @@ const PaperDetail = observer(function PaperDetail() {
         {papers.selectedPaper === "" ? (
           ""
         ) : (
-          <div className={styles.buttonContainer}>
+          <Box
+            className={styles.buttonContainer}
+            component="span"
+            display="block"
+          >
             <Tooltip
               enterDelay={700}
               title={
@@ -110,7 +102,7 @@ const PaperDetail = observer(function PaperDetail() {
                 Irrelevant
               </Button>
             </Tooltip>
-          </div>
+          </Box>
         )}
       </Paper>
     </Box>

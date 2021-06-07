@@ -8,30 +8,10 @@ import { makeStyles } from "@material-ui/styles";
 import React, { useState } from "react";
 
 const chartStyles = makeStyles({
-  container: {
-    width: "1000px",
-    height: "500px",
-  },
-  selectedCitationContainer: {
-    width: "50%",
-    minHeight: "10%",
-    margin: "10px",
-  },
   addedCitationsContainer: {
-    width: "50%",
-    height: "30%",
     overflowY: "scroll",
-    margin: "10px",
     padding: "10px",
   },
-  citationContainer: {
-    margin: "10px",
-    padding: "10px",
-  },
-  buttonContainer: {
-    margin: "10px",
-  },
-
   modal: {
     display: "flex",
     alignItems: "center",
