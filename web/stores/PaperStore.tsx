@@ -1,6 +1,7 @@
 //@ts-check
 import { observable, makeObservable, configure, computed, action } from "mobx";
 import { enableStaticRendering } from "mobx-react-lite";
+import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { UIStore } from ".";
 import { normalDistribution } from "./generator";
@@ -43,7 +44,7 @@ export class Paper {
     authors: string,
     date: string,
     categories: string,
-    abstract: string,
+    abstract: string
   ) {
     this.store = store;
     this.status = status;
@@ -98,6 +99,53 @@ export class PaperStore {
     makeObservable(this);
   }
 
+  @action getPapers(ui: UIStore, original: number) {
+    axios
+      // .post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
+      .post(`http://localhost:8080/api/recommend_papers`, {
+        userInput: ui.selectedText,
+        category: ui.category,
+        K: ui.k,
+      })
+      .then((res) => {
+        ui.setLoading(false);
+
+        // clear previous recommendations
+        // papers.clearRecommendations();
+
+        // add query
+        if (original == 0) {
+          this.addQuery(
+            "0", // reserve ID#0 for query vector
+            res.data[0].text,
+            parseFloat(res.data[0].x),
+            parseFloat(res.data[0].y),
+            res.data[0].embedding
+          );
+        }
+
+        // add recommended papers to the list
+        res.data.slice(original + 1).map((dict, idx) => {
+          this.recommendPaper(
+            (idx + original + 1).toString(),
+            dict.pid,
+            dict.authors,
+            dict.title,
+            dict.categories,
+            dict.date,
+            parseFloat(dict.x),
+            parseFloat(dict.y),
+            parseFloat(dict.simscore),
+            dict.embedding,
+            dict.abstract
+          );
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   @action selectPaper(selectionId: string) {
     this.selectedPaper = selectionId;
   }
@@ -105,7 +153,20 @@ export class PaperStore {
   @action setPage(pageNum: number) {
     this.pageNum = pageNum;
   }
+  @action drop() {
+    this.papers = [];
+    this.selectedPaper = "";
+  }
 
+  @computed get toText() {
+    return this.allAddedPapers
+      .map((paper) => {
+        return `${paper.authors}. ${paper.name}, ${paper.date.substring(0, 4)}`;
+      })
+      .reduce((v1, v2) => {
+        return v1 + "\n" + v2;
+      });
+  }
   @computed get first() {
     return this.pageSize * (this.pageNum - 1);
   }
@@ -196,7 +257,7 @@ export class PaperStore {
       paper.authors,
       paper.date,
       paper.categories,
-      paper.abstract,
+      paper.abstract
     );
   }
 
@@ -218,7 +279,7 @@ export class PaperStore {
         paper.authors,
         paper.date,
         paper.categories,
-        paper.abstract,
+        paper.abstract
       );
     } else if (paper.status == PaperStatus.Recommended) {
       this.papers[paperIndex] = new Paper(
@@ -233,7 +294,7 @@ export class PaperStore {
         paper.authors,
         paper.date,
         paper.categories,
-        paper.abstract,
+        paper.abstract
       );
     }
   }
@@ -264,8 +325,9 @@ export class PaperStore {
         authors,
         date,
         categories,
-        abstract,
-      ));
+        abstract
+      )
+    );
   }
 
   @action addQuery(id: string, text: string, x: number, y: number, embedding) {
@@ -282,8 +344,8 @@ export class PaperStore {
         null,
         null,
         null,
-        null,
-      )
-    ]
+        null
+      ),
+    ];
   }
 }

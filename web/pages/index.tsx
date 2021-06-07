@@ -2,8 +2,14 @@ import { Box, Button, Grid, makeStyles } from "@material-ui/core";
 import { Pagination } from "@material-ui/lab";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../hooks/useStores";
-import { CategorySelection, Input, PaperList, InteractiveChart, PaperDetail } from "../components";
-import axios from "axios";
+import {
+  CategorySelection,
+  Input,
+  PaperList,
+  InteractiveChart,
+  PaperDetail,
+  Citation,
+} from "../components";
 
 const chartStyles = makeStyles({
   container: {
@@ -49,50 +55,7 @@ const Home = observer(function Home() {
       );
     } else {
       ui.setLoading(true);
-      axios
-        // .post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
-        .post(`http://localhost:5000/api/recommend_papers`, {
-          userInput: ui.selectedText,
-          category: ui.category,
-          K: ui.k,
-        })
-        .then((res) => {
-          ui.setLoading(false);
-
-          // clear previous recommendations
-          // papers.clearRecommendations();
-
-          // add query
-          if (original == 0) {
-            papers.addQuery(
-              "0", // reserve ID#0 for query vector
-              res.data[0].text,
-              parseFloat(res.data[0].x),
-              parseFloat(res.data[0].y),
-              res.data[0].embedding
-            );
-          }
-
-          // add recommended papers to the list
-          res.data.slice(original + 1).map((dict, idx) => {
-            papers.recommendPaper(
-              (idx + original + 1).toString(),
-              dict.pid,
-              dict.authors,
-              dict.title,
-              dict.categories,
-              dict.date,
-              parseFloat(dict.x),
-              parseFloat(dict.y),
-              parseFloat(dict.simscore),
-              dict.embedding,
-              dict.abstract,
-            );
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      papers.getPapers(ui, original);
     }
   };
 
@@ -141,13 +104,19 @@ const Home = observer(function Home() {
         />
       </Grid>
       <Grid item xs={4}>
-        <Box>
-          <div className={styles.container}>
-            <InteractiveChart />
+        {papers.papers.length == 0 ? (
+          <Box></Box>
+        ) : (
+          <Box>
+            <div className={styles.container}>
+              <InteractiveChart />
 
-            <PaperDetail />
-          </div>
-        </Box>
+              <PaperDetail />
+
+              <Citation />
+            </div>
+          </Box>
+        )}
       </Grid>
     </Grid>
   );

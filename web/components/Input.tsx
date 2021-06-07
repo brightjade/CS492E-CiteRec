@@ -13,12 +13,12 @@ const Input = observer(function Input(props) {
     <Box m={2}>
       <TextField
         id="outlined-multiline-static"
-        label="Multiline"
+        label="Search Papers"
+        value={ui.selectedText}
         multiline
         fullWidth
         onChange={onChange}
         rows={8}
-        defaultValue=""
         variant="outlined"
       />
       {/* <Typography>{ui.selectedText}</Typography> */}
