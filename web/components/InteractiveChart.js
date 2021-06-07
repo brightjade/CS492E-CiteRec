@@ -29,7 +29,7 @@ const tooltipStyles = makeStyles({
     width: "200px",
   },
   label: {
-    color: "gray",
+    color: "black",
   },
   desc: {
     color: "gray",
@@ -41,8 +41,8 @@ const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <div className={styles.container}>
-        <p className={styles.label}>{payload[2].value}</p>
-        <p className={styles.desc}>{}</p>
+        <p className={styles.label}>{`Sim Score: ${payload[2].value}`}</p>
+        <p className={styles.desc}>{payload[2].payload.name}</p>
       </div>
     );
   }
@@ -59,21 +59,32 @@ const InteractiveChart = observer(function InteractiveChart() {
       <ScatterChart>
         <XAxis type="number" dataKey="x" tick={false} />
         <YAxis type="number" dataKey="y" tick={false} />
-        <ZAxis type="string" dataKey="name" />
+        <ZAxis type="number" dataKey="simscore" />
+        {/* <ZAxis type="string" dataKey="name" /> */}
         <Tooltip content={<CustomTooltip />} />
         <Legend verticalAlign="bottom" height={36} />
-        <Scatter
+        {/* <Scatter
           isAnimationActive={false}
           name="query"
           data={papers.query}
           fill={blue[300]}
-        />
-        {/* <ReferenceDot
-          x={papers.query[0].x}
-          y={papers.query[0].y}
-          fill={blue[300]}
-          stroke="none"
         /> */}
+        {papers.query.length > 0
+          ?
+          <ReferenceDot
+            x={papers.query[0].x}
+            y={papers.query[0].y}
+            fill={blue[300]}
+            stroke="none"
+          />
+          :
+          <ReferenceDot
+            x={0}
+            y={0}
+            fill={blue[300]}
+            stroke="none"
+          />
+        }
         <Scatter
           isAnimationActive={false}
           name="citation"

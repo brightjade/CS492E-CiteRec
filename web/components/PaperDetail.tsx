@@ -1,11 +1,4 @@
-import React, { useState } from "react";
-import {
-  ResponsiveContainer,
-  ScatterChart,
-  Scatter,
-  XAxis,
-  YAxis,
-} from "recharts";
+import React from "react";
 import { makeStyles } from "@material-ui/styles";
 import { Button, Paper, Tooltip, Box } from "@material-ui/core";
 
@@ -110,16 +103,21 @@ const PaperDetail = observer(function PaperDetail() {
         </Paper>
       </Box>
       <br />
-      <Box p={2}>
-        <Paper className={styles.addedCitationsContainer}>
-          {papers.allAddedPapers.map((paper) => {
-            // let citation = item;
-            return <Box>{paper.name}</Box>;
-          })}
-        </Paper>
-        <Button color="primary">SAVE</Button>
-      </Box>
+        {papers.allAddedPapers.length > 0
+          ?
+          <Box p={2}>
+            <Paper className={styles.addedCitationsContainer}>
+              {papers.allAddedPapers.map((paper) => {
+                return <p><Box>{paper.name}</Box></p>;
+              })}
+            </Paper>
+            <Button color="primary">SAVE</Button>
+          </Box>
+          :
+          ""
+        }
     </div>
   );
 });
+
 export default PaperDetail;

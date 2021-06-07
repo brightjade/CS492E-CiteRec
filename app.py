@@ -27,7 +27,7 @@ logger.addHandler(file_handler)
 # Initiate Flask
 app = Flask(__name__, static_url_path='', static_folder='web/out')
 app.secret_key = secrets.token_bytes(32)
-# CORS(app)     # turn this off in production.
+CORS(app)     # turn this off in production.
 
 @app.route('/ping')
 def ping():
@@ -43,9 +43,10 @@ def serve(path):
 @app.route('/api/recommend_papers', methods=['POST'])
 def recommend_papers():
     logger.info('Recommending Papers')
-    K = request.json.get('K')
     user_input = request.json.get('userInput')
-    query_coordinates, topk_papers = extract_topk_papers(user_input, K)
+    category = request.json.get('category')
+    K = request.json.get('K')
+    query_coordinates, topk_papers = extract_topk_papers(user_input, category, K)
     concat_results = [query_coordinates] + topk_papers
     return json.dumps(concat_results)
     
