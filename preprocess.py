@@ -26,10 +26,12 @@ CS_CATEGORIES = {'cs.CG', 'cs.GR', 'cs.DB', 'cs.FL', 'cs.CC', 'cs.SC', 'cs.MM', 
 def load_and_cache_examples(data_path):
 
     cached_examples_file = os.path.join("data", "cached_examples.pt")
+    abstracts_file = os.path.join("data", "abstracts.pt")
 
     if os.path.exists(cached_examples_file):
         print("Loading examples")
         examples = torch.load(cached_examples_file)
+        abstracts = torch.load(abstracts_file)
     else:
         print("Creating examples")
         max_seq_len = 512
@@ -38,7 +40,7 @@ def load_and_cache_examples(data_path):
         model = AutoModel.from_pretrained('albert-base-v2', cache_dir='cache/', config=config)
         sbert_model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
         sbert_model.max_seq_length = max_seq_len
-        examples = []
+        examples, abstracts = [], []
 
         with open(data_path, "r", encoding="utf-8") as f:
             for line in tqdm(f, desc="Reading data"):
@@ -76,34 +78,34 @@ def load_and_cache_examples(data_path):
                         "albert_embedding": albert_embedding,
                         "sbert_embedding": sbert_embedding,
                     })
+                    abstracts.append(abstract)
 
         torch.save(examples, cached_examples_file)
+        torch.save(abstracts, abstracts_file)
     
-    return examples
+    return examples, abstracts
 
 
-def categorize_embeddings(examples):
+def categorize_embeddings(examples, abstracts):
 
     sbert_embeddings_dict = defaultdict(list)
     albert_embeddings_dict = defaultdict(list)
     metadata_dict = defaultdict(list)
+    abstracts_dict = defaultdict(list)
 
-    for example in tqdm(examples, desc="Categorizing examples"):
+    for example, abstract in tqdm(zip(examples, abstracts), desc="Categorizing examples"):
         for category in example['categories']:
             sbert_embeddings_dict[category].append(torch.tensor(example['sbert_embedding']))        # sbert_embedding of shape (D,)
             albert_embeddings_dict[category].append(torch.tensor(example['albert_embedding']))      # albert_embedding of shape (1, D,)
 
-            # web scrape citation info
+            # [DEPRECATED: TOO SLOW] web scrape citation info
             # url = f"http://export.arxiv.org/api/query?id_list={example['id']}"
             # url = f"https://arxiv2bibtex.org/?q={example['id']}&format=bibtex"
-
             # with urllib.request.urlopen(url) as response:
             #     html = response.read()
-
             # soup = BeautifulSoup(html, 'html.parser')
             # textarea = soup.find_all('textarea')
             # bibtex = textarea[0].string.strip()
-            # wiki = textarea[3].text.strip()
 
             metadata_dict[category].append({
                 "id": example['id'],
@@ -111,9 +113,8 @@ def categorize_embeddings(examples):
                 "title": example['title'],
                 "date": example['date'],
                 "categories": example['categories'],
-                # "bibtex": bibtex,
-                # "wiki": wiki,
             })
+            abstracts_dict[category].append(abstract)
 
     sbert_stacked_embeddings_dict = {}
     albert_stacked_embeddings_dict = {}
@@ -126,17 +127,19 @@ def categorize_embeddings(examples):
         print(len(sbert_embeddings_dict[category]))
         print(len(albert_embeddings_dict[category]))
         print(len(metadata_dict[category]))
+        print(len(abstracts_dict[category]))
         print()
 
         torch.save(sbert_stacked_embeddings_dict[category], os.path.join("data", f"sbert_embeddings_{category[3:]}.pt"))
         torch.save(albert_stacked_embeddings_dict[category], os.path.join("data", f"albert_embeddings_{category[3:]}.pt"))
         torch.save(metadata_dict[category], os.path.join("data", f"metadata_{category[3:]}.pt"))
+        torch.save(abstracts_dict[category], os.path.join("data", f"abstracts_{category[3:]}.pt"))
 
 
 if __name__ == "__main__":
     data_path = '../arxiv-metadata-oai-snapshot.json'
 
-    examples = load_and_cache_examples(data_path)
-    print(len(examples))
+    examples, abstracts = load_and_cache_examples(data_path)
+    print(len(abstracts))
 
-    categorize_embeddings(examples)
+    categorize_embeddings(examples, abstracts)

@@ -86,6 +86,7 @@ const Home = observer(function Home() {
               parseFloat(dict.y),
               parseFloat(dict.simscore),
               dict.embedding,
+              dict.abstract,
             );
           });
         })

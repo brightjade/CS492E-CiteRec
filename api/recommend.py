@@ -10,6 +10,10 @@ def extract_topk_papers(user_input, category, K):
 
     topk_papers = []
 
+    # Load metadata and abstract
+    metadata = torch.load(os.path.join("data", f"metadata_{category}.pt"))
+    abstracts = torch.load(os.path.join("data", f"abstracts_{category}.pt"))
+
     ##### TF-IDF #####
     # with open('data/arxiv-table.pickle', 'rb') as f:
     #     table = pickle.load(f)
@@ -22,7 +26,6 @@ def extract_topk_papers(user_input, category, K):
     model = SentenceTransformer('cache/paraphrase-MiniLM-L6-v2/')   # on deploy, use local cache folder for loading model
     # model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
     sbert_embeddings = torch.load(os.path.join("data", f"sbert_embeddings_{category}.pt"))
-    metadata = torch.load(os.path.join("data", f"metadata_{category}.pt"))
 
     query_embedding = model.encode(user_input, convert_to_tensor=True)
     cos_similarities = util.pytorch_cos_sim(query_embedding, sbert_embeddings)
@@ -64,6 +67,7 @@ def extract_topk_papers(user_input, category, K):
             "y": str(all_coordinates[i.item()][1]),
             "simscore": "{:.4f}".format(topk_scores[idx].item()),
             "embedding": all_embeddings[i.item()].detach().cpu().tolist(),
+            "abstract": abstracts[i.item()],
         })
 
     return query_data, topk_papers

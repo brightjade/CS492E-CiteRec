@@ -29,6 +29,7 @@ export class Paper {
   authors: string;
   date: string;
   categories: string;
+  abstract: string;
 
   constructor(
     store: PaperStore,
@@ -42,6 +43,7 @@ export class Paper {
     authors: string,
     date: string,
     categories: string,
+    abstract: string,
   ) {
     this.store = store;
     this.status = status;
@@ -54,6 +56,7 @@ export class Paper {
     this.authors = authors;
     this.date = date;
     this.categories = categories;
+    this.abstract = abstract;
 
     makeObservable(this);
   }
@@ -193,6 +196,7 @@ export class PaperStore {
       paper.authors,
       paper.date,
       paper.categories,
+      paper.abstract,
     );
   }
 
@@ -214,6 +218,7 @@ export class PaperStore {
         paper.authors,
         paper.date,
         paper.categories,
+        paper.abstract,
       );
     } else if (paper.status == PaperStatus.Recommended) {
       this.papers[paperIndex] = new Paper(
@@ -228,6 +233,7 @@ export class PaperStore {
         paper.authors,
         paper.date,
         paper.categories,
+        paper.abstract,
       );
     }
   }
@@ -242,7 +248,8 @@ export class PaperStore {
     x: number,
     y: number,
     simscore: number,
-    embedding
+    embedding,
+    abstract
   ) {
     this.papers.push(
       new Paper(
@@ -257,6 +264,7 @@ export class PaperStore {
         authors,
         date,
         categories,
+        abstract,
       ));
   }
 
@@ -273,7 +281,8 @@ export class PaperStore {
         null,
         null,
         null,
-        null
+        null,
+        null,
       )
     ]
   }

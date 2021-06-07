@@ -46,8 +46,8 @@ def recommend_papers():
     user_input = request.json.get('userInput')
     category = request.json.get('category')
     K = request.json.get('K')
-    query_coordinates, topk_papers = extract_topk_papers(user_input, category, K)
-    concat_results = [query_coordinates] + topk_papers
+    query_data, topk_papers = extract_topk_papers(user_input, category, K)
+    concat_results = [query_data] + topk_papers
     return json.dumps(concat_results)
     
 
