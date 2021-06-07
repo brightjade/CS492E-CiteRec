@@ -8,22 +8,24 @@ enableStaticRendering(typeof window === "undefined");
 configure({ enforceActions: "always" });
 
 export class UIStore {
-  //selection
   @observable selectedText: string = "";
-  //loading
+  @observable category: string = "AI";
   @observable k: number = 30;
   @observable loading: boolean = false;
+  
   constructor() {
     makeObservable(this);
   }
 
-  @action setK(k: number) {
-    this.k = k;
-  }
   @action setSelectedText(selection: string) {
     this.selectedText = selection;
   }
-
+  @action setCategory(category: string) {
+    this.category = category;
+  }
+  @action setK(k: number) {
+    this.k = k;
+  }
   @action setLoading(loading: boolean) {
     this.loading = loading;
   }

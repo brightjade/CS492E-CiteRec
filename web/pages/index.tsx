@@ -2,7 +2,7 @@ import { Box, Button, Grid, makeStyles } from "@material-ui/core";
 import { Pagination } from "@material-ui/lab";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../hooks/useStores";
-import { Input, PaperList, InteractiveChart, PaperDetail } from "../components";
+import { CategorySelection, Input, PaperList, InteractiveChart, PaperDetail } from "../components";
 import axios from "axios";
 
 const chartStyles = makeStyles({
@@ -27,6 +27,8 @@ const chartStyles = makeStyles({
 const Home = observer(function Home() {
   const { ui, papers } = useStores();
   const styles = chartStyles();
+
+  // handles page change (pagination)
   const onChange = (e, page: number) => {
     papers.setPage(page);
     if ((papers.extraPages + page) * papers.pageSize > ui.k) {
@@ -36,6 +38,8 @@ const Home = observer(function Home() {
       onRecommend(original);
     }
   };
+
+  // handles recommendation button (API CALL)
   const onRecommend = (original) => {
     if (ui.selectedText === "") {
       alert("You must input text for recommendations.");
@@ -46,10 +50,11 @@ const Home = observer(function Home() {
     } else {
       ui.setLoading(true);
       axios
-        .post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
-        // .post(`http://localhost:5000/api/recommend_papers`, {
+        // .post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
+        .post(`http://localhost:5000/api/recommend_papers`, {
           userInput: ui.selectedText,
-          K: ui.k, // TODO: let user choose K
+          category: ui.category,
+          K: ui.k,
         })
         .then((res) => {
           ui.setLoading(false);
@@ -79,7 +84,8 @@ const Home = observer(function Home() {
               dict.date,
               parseFloat(dict.x),
               parseFloat(dict.y),
-              dict.embedding
+              parseFloat(dict.simscore),
+              dict.embedding,
             );
           });
         })
@@ -88,10 +94,16 @@ const Home = observer(function Home() {
         });
     }
   };
+
   return (
     <Grid container>
       <Grid item xs={3}>
+        {/* Textarea to fetch user query */}
         <Input />
+
+        {/* Radio buttons for choosing category */}
+        <CategorySelection />
+
         <Box m={2}>
           <Grid container justify="flex-end">
             {ui.loading ? (

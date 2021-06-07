@@ -24,6 +24,7 @@ export class Paper {
   @observable status: PaperStatus;
   x: number;
   y: number;
+  simscore: number;
   pid: string;
   authors: string;
   date: string;
@@ -36,6 +37,7 @@ export class Paper {
     id: string,
     x: number,
     y: number,
+    simscore: number,
     pid: string,
     authors: string,
     date: string,
@@ -47,6 +49,7 @@ export class Paper {
     this.id = id;
     this.x = x;
     this.y = y;
+    this.simscore = simscore;
     this.pid = pid;
     this.authors = authors;
     this.date = date;
@@ -185,6 +188,7 @@ export class PaperStore {
       paper.id,
       paper.x,
       paper.y,
+      paper.simscore,
       paper.pid,
       paper.authors,
       paper.date,
@@ -205,6 +209,7 @@ export class PaperStore {
         paper.id,
         paper.x,
         paper.y,
+        paper.simscore,
         paper.pid,
         paper.authors,
         paper.date,
@@ -218,6 +223,7 @@ export class PaperStore {
         paper.id,
         paper.x,
         paper.y,
+        paper.simscore,
         paper.pid,
         paper.authors,
         paper.date,
@@ -235,6 +241,7 @@ export class PaperStore {
     date: string,
     x: number,
     y: number,
+    simscore: number,
     embedding
   ) {
     this.papers.push(
@@ -245,6 +252,7 @@ export class PaperStore {
         id,
         x,
         y,
+        simscore,
         pid,
         authors,
         date,
@@ -261,6 +269,7 @@ export class PaperStore {
         id,
         x,
         y,
+        null,
         null,
         null,
         null,
