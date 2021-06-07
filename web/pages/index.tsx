@@ -41,12 +41,12 @@ const Home = observer(function Home() {
       const original = ui.k;
       ui.setK((papers.extraPages + papers.pageCount) * papers.pageSize);
       console.log(`exceeded: ${original}`);
-      onRecommend(original);
+      onRecommend();
     }
   };
 
   // handles recommendation button (API CALL)
-  const onRecommend = (original) => {
+  const onRecommend = () => {
     if (ui.selectedText === "") {
       alert("You must input text for recommendations.");
     } else if (ui.selectedText.length <= 10) {
@@ -55,7 +55,7 @@ const Home = observer(function Home() {
       );
     } else {
       ui.setLoading(true);
-      papers.getPapers(ui, original);
+      papers.getPapers(ui);
     }
   };
 
@@ -68,26 +68,49 @@ const Home = observer(function Home() {
         {/* Radio buttons for choosing category */}
         <CategorySelection />
 
-        <Box m={2}>
+        <Box component="span" display="block" m={2}>
+          <Grid container direction="row" justify="space-between">
+            <Box component="div" display="inline" pr={2}>
+              <Button
+                onClick={() => papers.clearDeselected()}
+                color="secondary"
+                variant="outlined"
+              >
+                Clear Non-Added
+              </Button>
+            </Box>
+            <Box component="div" display="inline">
+              <Button
+                onClick={() => papers.drop()}
+                variant="outlined"
+                color="secondary"
+              >
+                Start Over
+              </Button>
+            </Box>
+          </Grid>
+
           <Grid container justify="flex-end">
-            {ui.loading ? (
-              <Button
-                variant="contained"
-                color="primary"
-                disabled
-                onClick={onRecommend}
-              >
-                Recommending...
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => onRecommend(0)}
-              >
-                Recommend
-              </Button>
-            )}
+            <Box pt={2}>
+              {ui.loading ? (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled
+                  onClick={onRecommend}
+                >
+                  Recommending...
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={onRecommend}
+                >
+                  Recommend
+                </Button>
+              )}
+            </Box>
           </Grid>
         </Box>
       </Grid>

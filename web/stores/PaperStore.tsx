@@ -99,7 +99,7 @@ export class PaperStore {
     makeObservable(this);
   }
 
-  @action getPapers(ui: UIStore, original: number) {
+  @action getPapers(ui: UIStore) {
     axios
       // .post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
       .post(`http://localhost:8080/api/recommend_papers`, {
@@ -114,7 +114,7 @@ export class PaperStore {
         // papers.clearRecommendations();
 
         // add query
-        if (original == 0) {
+        if (this.papers.length == 0) {
           this.addQuery(
             "0", // reserve ID#0 for query vector
             res.data[0].text,
@@ -125,9 +125,9 @@ export class PaperStore {
         }
 
         // add recommended papers to the list
-        res.data.slice(original + 1).map((dict, idx) => {
+        res.data.slice(this.papers.length + 1).map((dict, idx) => {
           this.recommendPaper(
-            (idx + original + 1).toString(),
+            (idx + this.papers.length + 1).toString(),
             dict.pid,
             dict.authors,
             dict.title,
@@ -261,6 +261,15 @@ export class PaperStore {
     );
   }
 
+  @action clearDeselected() {
+    let selected = this.papers.filter(
+      (paper) =>
+        paper.status == PaperStatus.Added || paper.status == PaperStatus.Query
+    );
+    console.log(selected);
+    this.papers = selected;
+  }
+
   @action togglePaper(id: string) {
     let paperIndex = this.papers.findIndex((value) => value.id === id);
     // console.log(paperIndex);
@@ -312,22 +321,23 @@ export class PaperStore {
     embedding,
     abstract
   ) {
-    this.papers.push(
-      new Paper(
-        this,
-        title,
-        PaperStatus.Recommended,
-        id,
-        x,
-        y,
-        simscore,
-        pid,
-        authors,
-        date,
-        categories,
-        abstract
-      )
-    );
+    if (this.papers.findIndex((paper) => paper.pid === pid) == -1)
+      this.papers.push(
+        new Paper(
+          this,
+          title,
+          PaperStatus.Recommended,
+          id,
+          x,
+          y,
+          simscore,
+          pid,
+          authors,
+          date,
+          categories,
+          abstract
+        )
+      );
   }
 
   @action addQuery(id: string, text: string, x: number, y: number, embedding) {
