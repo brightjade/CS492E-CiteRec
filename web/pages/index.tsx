@@ -87,8 +87,10 @@ const Home = observer(function Home() {
         "The query string is too short. Must be greater than 10 characters."
       );
     } else {
+      papers.clearDeselected();
+      ui.setQueryChanged(true);
       ui.setLoading(true);
-      papers.getPapers(ui, true);
+      papers.getPapers(ui);
     }
   };
 
@@ -130,7 +132,9 @@ const Home = observer(function Home() {
                   arrow
                 >
                   <Button
-                    onClick={() => papers.clearDeselected()}
+                    onClick={() => {
+                      papers.clearDeselected();
+                    }}
                     color="secondary"
                     variant="outlined"
                     disabled={papers.papers.length == 0}
@@ -152,7 +156,9 @@ const Home = observer(function Home() {
                     }}
                     variant="outlined"
                     color="secondary"
-                    disabled={papers.papers.length == 0}
+                    disabled={
+                      papers.papers.length == 0 && ui.selectedText == ""
+                    }
                   >
                     Start Over
                   </Button>
@@ -178,7 +184,6 @@ const Home = observer(function Home() {
                       ui.setK(30);
                       onRecommend();
                     }}
-                    disabled={!ui.queryChanged}
                   >
                     Search
                   </Button>

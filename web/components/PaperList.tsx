@@ -98,7 +98,7 @@ const PaperList = observer(function PaperList(props) {
             onClick={() => {
               ui.setLoading(true);
               ui.setK(ui.k + papers.extraPages * papers.pageSize);
-              papers.getPapers(ui, false);
+              papers.getPapers(ui);
             }}
           >
             Load More...

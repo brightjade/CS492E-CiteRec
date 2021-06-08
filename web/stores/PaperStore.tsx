@@ -112,7 +112,7 @@ export class PaperStore {
     });
   }
 
-  @action getPapers(ui: UIStore, newQuery: boolean) {
+  @action getPapers(ui: UIStore) {
     axios
       // .post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
       .post(`http://localhost:8080/api/recommend_papers`, {
@@ -122,19 +122,8 @@ export class PaperStore {
       })
       .then((res) => {
         ui.setLoading(false);
-        ui.setQueryChanged(false);
-        if (newQuery) {
+        if (ui.queryChanged) {
           this.replaceQuery(
-            "0", // reserve ID#0 for query vector
-            res.data[0].text,
-            parseFloat(res.data[0].x),
-            parseFloat(res.data[0].y),
-            res.data[0].embedding
-          );
-        }
-        // add query
-        else if (this.query === undefined) {
-          this.addQuery(
             "0", // reserve ID#0 for query vector
             res.data[0].text,
             parseFloat(res.data[0].x),
@@ -179,7 +168,6 @@ export class PaperStore {
       })
       .then((res) => {
         ui.setLoading(false);
-        ui.setQueryChanged(false);
         this.replaceQuery(
           "0", // reserve ID#0 for query vector
           res.data[0].text,
@@ -207,7 +195,6 @@ export class PaperStore {
       .catch((err) => {
         console.log(err);
         ui.setLoading(false);
-        ui.setQueryChanged(false);
       });
   }
 
@@ -453,7 +440,7 @@ export class PaperStore {
         null,
         embedding
       );
-    }
+    } else this.addQuery(id, text, x, y, embedding);
   }
 
   @action addQuery(id: string, text: string, x: number, y: number, embedding) {

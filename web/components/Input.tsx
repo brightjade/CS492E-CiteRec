@@ -6,7 +6,6 @@ import { TextField, Box, Typography } from "@material-ui/core";
 const Input = observer(function Input(props) {
   const { ui } = useStores();
   const onChange = (e) => {
-    ui.setQueryChanged(true);
     ui.setSelectedText(e.target.value);
   };
   // console.log(`: ${ui.selectedText}`);
