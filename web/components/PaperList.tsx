@@ -9,6 +9,9 @@ import {
   ListItemSecondaryAction,
   IconButton,
   Typography,
+  Box,
+  Button,
+  Grid,
 } from "@material-ui/core";
 // import {  } from "@material-ui/icons";
 import { RemoveCircle } from "@material-ui/icons";
@@ -73,6 +76,14 @@ const PaperList = observer(function PaperList(props) {
           </ListItem>
         );
       })}
+
+      {papers.pageNum == papers.pageCount ? (
+        <Grid container justify="center">
+          <Button>Load More...</Button>
+        </Grid>
+      ) : (
+        <Box></Box>
+      )}
     </List>
   );
 });

@@ -125,9 +125,9 @@ export class PaperStore {
         }
 
         // add recommended papers to the list
-        res.data.slice(this.papers.length + 1).map((dict, idx) => {
+        res.data.slice(1).forEach((dict) => {
           this.recommendPaper(
-            (idx + this.papers.length + 1).toString(),
+            uuidv4(),
             dict.pid,
             dict.authors,
             dict.title,
@@ -140,9 +140,12 @@ export class PaperStore {
             dict.abstract
           );
         });
+
+        console.log(this.papers);
       })
       .catch((err) => {
         console.log(err);
+        ui.setLoading(false);
       });
   }
 

@@ -35,16 +35,17 @@ const Home = observer(function Home() {
   // handles page change (pagination)
   const onChange = (e, page: number) => {
     papers.setPage(page);
-    if ((papers.extraPages + page) * papers.pageSize > ui.k) {
-      const original = ui.k;
-      ui.setK((papers.extraPages + papers.pageCount) * papers.pageSize);
-      console.log(`exceeded: ${original}`);
-      onRecommend();
-    }
+    // if ((papers.extraPages + page) * papers.pageSize > ui.k) {
+    //   const original = ui.k;
+    //   ui.setK((papers.extraPages + papers.pageCount) * papers.pageSize);
+    //   console.log(`exceeded: ${original}`);
+    //   onRecommend();
+    // }
   };
 
   // handles recommendation button (API CALL)
   const onRecommend = () => {
+    console.log("recommending");
     if (ui.selectedText === "") {
       alert("You must input text for recommendations.");
     } else if (ui.selectedText.length <= 10) {
@@ -79,7 +80,14 @@ const Home = observer(function Home() {
             </Box>
             <Box component="div" display="inline">
               <Button
-                onClick={() => papers.drop()}
+                onClick={() => {
+                  papers.drop();
+                  ui.setSelectedText("");
+                  ui.setLoading(false);
+                  ui.setK(30);
+                  papers.selectPaper("");
+                  papers.setPage(1);
+                }}
                 variant="outlined"
                 color="secondary"
               >
@@ -103,7 +111,10 @@ const Home = observer(function Home() {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={onRecommend}
+                  onClick={() => {
+                    ui.setK(30);
+                    onRecommend();
+                  }}
                 >
                   Recommend
                 </Button>
@@ -125,22 +136,22 @@ const Home = observer(function Home() {
         />
       </Grid>
       <Grid item xs={4}>
-        <Box
-          p={2}
-          className={styles.container}
-          component="span"
-          display="block"
-        >
-          {/* {papers.papers.length == 0 ? (
+        {papers.papers.length == 0 ? (
           <Box></Box>
-        ) : ( */}
-          <InteractiveChart />
+        ) : (
+          <Box
+            p={2}
+            className={styles.container}
+            component="span"
+            display="block"
+          >
+            <InteractiveChart />
 
-          <PaperDetail />
+            <PaperDetail />
 
-          <Citation />
-        </Box>
-        {/* )} */}
+            <Citation />
+          </Box>
+        )}
       </Grid>
     </Grid>
   );

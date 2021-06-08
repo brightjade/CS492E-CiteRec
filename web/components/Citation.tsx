@@ -52,9 +52,13 @@ const Citation = observer(function Citation() {
                   variant="contained"
                   color="secondary"
                   onClick={() => {
-                    ui.setSelectedText("");
-                    setCopied(false);
                     papers.drop();
+                    setCopied(false);
+                    ui.setSelectedText("");
+                    ui.setLoading(false);
+                    ui.setK(30);
+                    papers.selectPaper("");
+                    papers.setPage(0);
                   }}
                 >
                   Start Over
