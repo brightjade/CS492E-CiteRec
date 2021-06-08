@@ -22,31 +22,6 @@ import {
 } from "../components";
 import { AddBox } from "@material-ui/icons";
 
-// const chartStyles = makeStyles({
-//   container: {
-//     width: "100%",
-//     height: "100%",
-//   },
-//   selectedCitationContainer: {
-//     height: "35%",
-//     // minHeight: "fit-content",
-//     // maxHeight: "380px",
-//     overflow: "auto",
-//     margin: "10pt",
-//   },
-//   addedCitationsContainer: {
-//     height: "30%",
-//     overflowY: "scroll",
-//   },
-//   buttonContainer: {
-//     margin: "10px",
-//   },
-//   title: {
-//     flexGrow: 1,
-//   },
-//   content: { width: "100%", height: "100%" },
-// });
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     width: "100%",
@@ -113,7 +88,7 @@ const Home = observer(function Home() {
       );
     } else {
       ui.setLoading(true);
-      papers.getPapers(ui);
+      papers.getPapers(ui, true);
     }
   };
 
@@ -158,6 +133,7 @@ const Home = observer(function Home() {
                     onClick={() => papers.clearDeselected()}
                     color="secondary"
                     variant="outlined"
+                    disabled={papers.papers.length == 0}
                   >
                     Clear Results
                   </Button>
@@ -176,6 +152,7 @@ const Home = observer(function Home() {
                     }}
                     variant="outlined"
                     color="secondary"
+                    disabled={papers.papers.length == 0}
                   >
                     Start Over
                   </Button>
@@ -201,6 +178,7 @@ const Home = observer(function Home() {
                       ui.setK(30);
                       onRecommend();
                     }}
+                    disabled={!ui.queryChanged}
                   >
                     Search
                   </Button>

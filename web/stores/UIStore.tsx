@@ -12,11 +12,15 @@ export class UIStore {
   @observable category: string = "AI";
   @observable k: number = 30;
   @observable loading: boolean = false;
-  
+  @observable queryChanged: boolean = false;
+
   constructor() {
     makeObservable(this);
   }
 
+  @action setQueryChanged(queryChanged: boolean) {
+    this.queryChanged = queryChanged;
+  }
   @action setSelectedText(selection: string) {
     this.selectedText = selection;
   }
