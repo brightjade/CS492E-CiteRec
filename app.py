@@ -5,7 +5,7 @@ import logging
 import secrets
 import json
 
-from api.recommend import extract_topk_papers
+from api.recommend import *
 
 # Create a custom logger
 logger = logging.getLogger(__name__)
@@ -47,6 +47,17 @@ def recommend_papers():
     category = request.json.get('category')
     K = request.json.get('K')
     query_data, topk_papers = extract_topk_papers(user_input, category, K)
+    concat_results = [query_data] + topk_papers
+    return json.dumps(concat_results)
+
+
+@app.route('/api/further_recommend_papers', methods=['POST'])
+def further_recommend_papers():
+    logger.info('Further Recommending Papers')
+    added_vectors = request.json.get('addedVectors')
+    category = request.json.get('category')
+    K = request.json.get('K')
+    query_data, topk_papers = extract_topk_papers_with_added_vectors(added_vectors, category, K)
     concat_results = [query_data] + topk_papers
     return json.dumps(concat_results)
     

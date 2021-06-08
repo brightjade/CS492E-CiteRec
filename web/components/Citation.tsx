@@ -22,9 +22,20 @@ const chartStyles = makeStyles({
 
 const Citation = observer(function Citation() {
   const styles = chartStyles();
-  // const data = dataGenerator(100);
   const { ui, papers } = useStores();
   const [copied, setCopied] = useState(false);
+
+  // handles further recommendation button (API CALL)
+  const onFurtherRecommend = () => {
+    // console.log("recommending");
+    if (papers.allAddedPapers.length < 2) {
+      alert("You must have at least two added papers for further recommendation.");
+    } else {
+      ui.setLoading(true);
+      papers.getMorePapers(ui);
+    }
+  };
+
   return (
     <Box>
       <Modal
@@ -88,7 +99,29 @@ const Citation = observer(function Citation() {
               >
                 <Button color="primary"> Copy To Clipboard </Button>
               </CopyToClipboard>
-              <Button variant="contained" color="primary" style={{ marginLeft: "10px" }}> Further Recommend </Button>
+              {ui.loading ? (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ marginLeft: "10px" }}
+                  disabled
+                  onClick={onFurtherRecommend}
+                >
+                  Recommending...
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ marginLeft: "10px" }}
+                  onClick={() => {
+                    ui.setK(30);
+                    onFurtherRecommend();
+                  }}
+                >
+                  Further Recommend
+                </Button>
+              )}
           </Box>
         </Box>
       ) : (

@@ -83,7 +83,7 @@ const InteractiveChart = observer(function InteractiveChart() {
               label={{ value: 'query', fontSize: '8px' }}
             />
           ) : (
-            <ReferenceDot x={0} y={0} fill={blue[300]} stroke="none" />
+            <ReferenceDot x={-100} y={-100} fill={blue[300]} stroke="none" />
           )}
           <Scatter
             isAnimationActive={false}

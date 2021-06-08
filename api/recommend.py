@@ -71,3 +71,48 @@ def extract_topk_papers(user_input, category, K):
         })
 
     return query_data, topk_papers
+
+
+def extract_topk_papers_with_added_vectors(added_vectors, category, K):
+    topk_papers = []
+
+    # Load metadata and abstract and embeddings
+    metadata = torch.load(os.path.join("data", f"metadata_{category}.pt"))
+    abstracts = torch.load(os.path.join("data", f"abstracts_{category}.pt"))
+    sbert_embeddings = torch.load(os.path.join("data", f"sbert_embeddings_{category}.pt"))
+
+    # Embed query and compute cosine similarities against each paper embedding in given category
+    query_embedding = torch.stack([torch.tensor(l) for l in added_vectors]).mean(dim=0)
+    cos_similarities = util.pytorch_cos_sim(query_embedding, sbert_embeddings)
+    topk_scores, topk_indices = torch.topk(cos_similarities, k=K)
+    topk_scores = topk_scores.squeeze(0)
+    topk_indices = topk_indices.squeeze(0)
+
+    # reduce dimensions using PCA to plot on x,y-coordinates
+    pca = PCA(n_components=2, random_state=42)
+    all_embeddings = torch.cat((sbert_embeddings, query_embedding.unsqueeze(0)), dim=0)
+    all_coordinates = pca.fit_transform(all_embeddings.detach().cpu().numpy())
+
+    # pass coordinates of query vector as well
+    query_data = {
+        "x" : str(all_coordinates[-1][0]),
+        "y" : str(all_coordinates[-1][1]),
+        "text": "",
+        "embedding": query_embedding.detach().cpu().tolist(),
+    }
+
+    for idx, i in enumerate(topk_indices):
+        topk_papers.append({
+            "pid": metadata[i.item()]['id'],
+            "authors": metadata[i.item()]['authors'],
+            "title": metadata[i.item()]['title'],
+            "categories": ', '.join(metadata[i.item()]['categories']),
+            "date": metadata[i.item()]['date'],
+            "x": str(all_coordinates[i.item()][0]),
+            "y": str(all_coordinates[i.item()][1]),
+            "simscore": "{:.4f}".format(topk_scores[idx].item()),
+            "embedding": all_embeddings[i.item()].detach().cpu().tolist(),
+            "abstract": abstracts[i.item()],
+        })
+
+    return query_data, topk_papers
