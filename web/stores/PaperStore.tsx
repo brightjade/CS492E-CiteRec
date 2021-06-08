@@ -338,7 +338,9 @@ export class PaperStore {
   @action clearDeselected() {
     let selected = this.papers.filter(
       (paper) =>
-        paper.status == PaperStatus.Added || paper.status == PaperStatus.Query
+        paper.status == PaperStatus.Added ||
+        paper.status == PaperStatus.Query ||
+        paper.status == PaperStatus.Blacklisted
     );
     this.setPage(1);
     console.log(selected);

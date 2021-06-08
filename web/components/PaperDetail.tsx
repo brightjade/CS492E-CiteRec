@@ -25,6 +25,7 @@ const PaperDetail = observer(function PaperDetail() {
   const styles = chartStyles();
   // const data = dataGenerator(100);
   const { ui, papers } = useStores();
+  const selectedPaper = papers.paperById(papers.selectedPaper);
 
   return (
     <Box p={2}>
@@ -36,29 +37,51 @@ const PaperDetail = observer(function PaperDetail() {
             <b>Arxiv ID:</b>&nbsp;
             <a
               style={{ color: "#0000EE", textDecoration: "underline" }}
-              href={
-                "https://arxiv.org/abs/" +
-                papers.paperById(papers.selectedPaper)?.pid
-              }
+              href={"https://arxiv.org/abs/" + selectedPaper?.pid}
               target="_blank"
             >
-              {papers.paperById(papers.selectedPaper)?.pid}
+              {selectedPaper?.pid}
             </a>
             <br />
-            <b>Title:</b> {papers.paperById(papers.selectedPaper)?.name}
+            <b>Title:</b> {selectedPaper?.name}
             <br />
-            <b>Authors:</b> {papers.paperById(papers.selectedPaper)?.authors}
+            <b>Authors:</b> {selectedPaper?.authors}
             <br />
-            <b>Categories:</b>{" "}
-            {papers.paperById(papers.selectedPaper)?.categories}
+            <b>Categories:</b> {selectedPaper?.categories}
             <br />
-            <b>Update Date:</b> {papers.paperById(papers.selectedPaper)?.date}
+            <b>Update Date:</b> {selectedPaper?.date}
             <br />
-            <b>Abstract:</b> {papers.paperById(papers.selectedPaper)?.abstract}
+            <b>Abstract:</b> {selectedPaper?.abstract}
           </div>
         )}
         {papers.selectedPaper === "" ? (
           ""
+        ) : selectedPaper?.status == PaperStatus.Blacklisted ? (
+          <Box
+            className={styles.buttonContainer}
+            component="span"
+            display="block"
+          >
+            <Tooltip
+              enterDelay={700}
+              title={
+                "Not irrelevant: This paper will re-appear in your recommendation list"
+              }
+              arrow
+            >
+              <Button
+                color="secondary"
+                onClick={() =>
+                  papers.changeStatus(
+                    papers.selectedPaper,
+                    PaperStatus.Recommended
+                  )
+                }
+              >
+                {"Not Irrelevant"}
+              </Button>
+            </Tooltip>
+          </Box>
         ) : (
           <Box
             className={styles.buttonContainer}
@@ -79,10 +102,7 @@ const PaperDetail = observer(function PaperDetail() {
                 color="primary"
                 onClick={() => papers.togglePaper(papers.selectedPaper)}
               >
-                {papers.paperById(papers.selectedPaper)?.status ==
-                PaperStatus.Added
-                  ? "Remove"
-                  : "Add"}
+                {selectedPaper?.status == PaperStatus.Added ? "Remove" : "Add"}
               </Button>
             </Tooltip>
             <Tooltip

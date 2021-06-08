@@ -13,7 +13,7 @@ import {
   Button,
   Grid,
 } from "@material-ui/core";
-// import {  } from "@material-ui/icons";
+import { Block, Cancel, Close, Remove, Undo } from "@material-ui/icons";
 import { RemoveCircle } from "@material-ui/icons";
 import { PaperStatus } from "../stores/PaperStore";
 import { green, red } from "@material-ui/core/colors";
@@ -34,15 +34,19 @@ const PaperList = observer(function PaperList(props) {
             }}
           >
             <ListItemIcon>
-              <Checkbox
-                edge="start"
-                checked={paper.status == PaperStatus.Added}
-                tabIndex={-1}
-                disableRipple
-                onClick={() => {
-                  papers.togglePaper(paper.id);
-                }}
-              />
+              {paper.status == PaperStatus.Blacklisted ? (
+                <Remove fontSize="small" />
+              ) : (
+                <Checkbox
+                  edge="start"
+                  checked={paper.status == PaperStatus.Added}
+                  tabIndex={-1}
+                  disableRipple
+                  onClick={() => {
+                    papers.togglePaper(paper.id);
+                  }}
+                />
+              )}
             </ListItemIcon>
             <ListItemText
               disableTypography
@@ -65,19 +69,29 @@ const PaperList = observer(function PaperList(props) {
             <ListItemSecondaryAction>
               <IconButton
                 onClick={() => {
-                  papers.changeStatus(paper.id, PaperStatus.Blacklisted);
+                  papers.changeStatus(
+                    paper.id,
+                    paper.status == PaperStatus.Blacklisted
+                      ? PaperStatus.Recommended
+                      : PaperStatus.Blacklisted
+                  );
                 }}
                 edge="end"
                 aria-label="blacklist"
               >
-                <RemoveCircle />
+                {paper.status == PaperStatus.Blacklisted ? (
+                  <Close />
+                ) : (
+                  <Block />
+                )}
               </IconButton>
             </ListItemSecondaryAction>
           </ListItem>
         );
       })}
 
-      {papers.allRecommendedPapers.length > 0 && papers.pageNum == papers.pageCount ? (
+      {papers.allRecommendedPapers.length > 0 &&
+      papers.pageNum == papers.pageCount ? (
         <Grid container justify="center">
           <Button
             disabled={ui.loading}
