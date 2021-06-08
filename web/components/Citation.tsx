@@ -58,7 +58,7 @@ const Citation = observer(function Citation() {
                     ui.setLoading(false);
                     ui.setK(30);
                     papers.selectPaper("");
-                    papers.setPage(0);
+                    papers.setPage(1);
                   }}
                 >
                   Start Over
@@ -71,7 +71,16 @@ const Citation = observer(function Citation() {
       {papers.allAddedPapers.length > 0 ? (
         <Box p={2}>
           <Paper className={styles.addedCitationsContainer}>
-            <Box p={1}>{papers.toText}</Box>
+            <Box p={1}>
+              {papers.toText.split("\n").map((line) => {
+                return (
+                  <span>
+                    {line}
+                    <br />
+                  </span>
+                );
+              })}
+            </Box>
             <Box component="span" display="block">
               <CopyToClipboard
                 text={papers.toText}

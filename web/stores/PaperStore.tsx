@@ -102,7 +102,7 @@ export class PaperStore {
   @action getPapers(ui: UIStore) {
     axios
       // .post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
-      .post(`http://localhost:8080/api/recommend_papers`, {
+      .post(`http://localhost:5000/api/recommend_papers`, {
         userInput: ui.selectedText,
         category: ui.category,
         K: ui.k,
@@ -164,7 +164,7 @@ export class PaperStore {
   @computed get toText() {
     return this.allAddedPapers
       .map((paper) => {
-        return `${paper.authors}. ${paper.name}, ${paper.date.substring(0, 4)}`;
+        return `${paper.authors}. ${paper.name}, ${paper.date.substring(0, 4)}.`;
       })
       .reduce((v1, v2) => {
         return v1 + "\n" + v2;
