@@ -1,4 +1,14 @@
-import { Box, Paper, Button, Modal, Grid } from "@material-ui/core";
+import {
+  Box,
+  Paper,
+  Button,
+  Modal,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
+  Tooltip,
+} from "@material-ui/core";
 import { DoneAll } from "@material-ui/icons";
 
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -9,9 +19,8 @@ import React, { useState } from "react";
 
 const chartStyles = makeStyles({
   addedCitationsContainer: {
-    maxHeight: "200px",
-    overflow: "auto",
-    padding: "0px 10px",
+    maxHeight: "125px",
+    overflow: "scroll",
   },
   modal: {
     display: "flex",
@@ -29,7 +38,9 @@ const Citation = observer(function Citation() {
   const onFurtherRecommend = () => {
     // console.log("recommending");
     if (papers.allAddedPapers.length < 2) {
-      alert("You must have at least two added papers for further recommendation.");
+      alert(
+        "You must have at least two added papers for further recommendation."
+      );
     } else {
       ui.setLoading(true);
       papers.getMorePapers(ui);
@@ -81,18 +92,22 @@ const Citation = observer(function Citation() {
         }
       </Modal>
       {papers.allAddedPapers.length > 0 ? (
-        <Box p={2}>
-          <h3 style={{ padding: "0px 10px" }}>References</h3>
-          <Paper className={styles.addedCitationsContainer}>
-            <Box p={1}>
-              {papers.allAddedPapers.map((paper) => {
-                return (
-                  <p>{paper.authors}. <b>{paper.name}</b>, {paper.date.substring(0, 4)}.</p>
-                );
-              })}
-            </Box>
-          </Paper>
-          <Box component="span" display="block" style={{ margin: "10px 0px" }}>
+        <Box>
+          <h3>References</h3>
+          <Card>
+            <CardContent>
+              <Box className={styles.addedCitationsContainer}>
+                {papers.allAddedPapers.map((paper) => {
+                  return (
+                    <p>
+                      {paper.authors}. <b>{paper.name}</b>,{" "}
+                      {paper.date.substring(0, 4)}.
+                    </p>
+                  );
+                })}
+              </Box>
+            </CardContent>
+            <CardActions>
               <CopyToClipboard
                 text={papers.toText}
                 onCopy={() => setCopied(true)}
@@ -107,22 +122,29 @@ const Citation = observer(function Citation() {
                   disabled
                   onClick={onFurtherRecommend}
                 >
-                  Recommending...
+                  Loading Results...
                 </Button>
               ) : (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  style={{ marginLeft: "10px" }}
-                  onClick={() => {
-                    ui.setK(30);
-                    onFurtherRecommend();
-                  }}
+                <Tooltip
+                  enterDelay={700}
+                  title={"Refined search based the papers you have added."}
+                  arrow
                 >
-                  Further Recommend
-                </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{ marginLeft: "10px" }}
+                    onClick={() => {
+                      ui.setK(30);
+                      onFurtherRecommend();
+                    }}
+                  >
+                    Refined Search
+                  </Button>
+                </Tooltip>
               )}
-          </Box>
+            </CardActions>
+          </Card>
         </Box>
       ) : (
         ""

@@ -1,5 +1,12 @@
 //@ts-check
-import { observable, makeObservable, configure, computed, action } from "mobx";
+import {
+  observable,
+  makeObservable,
+  configure,
+  computed,
+  action,
+  autorun,
+} from "mobx";
 import { enableStaticRendering } from "mobx-react-lite";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
@@ -100,6 +107,9 @@ export class PaperStore {
 
   constructor() {
     makeObservable(this);
+    autorun(() => {
+      console.log(this.query);
+    });
   }
 
   @action getPapers(ui: UIStore) {

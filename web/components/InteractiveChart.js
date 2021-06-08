@@ -42,11 +42,17 @@ const tooltipStyles = makeStyles({
 
 const CustomTooltip = ({ active, payload, label }) => {
   const styles = tooltipStyles();
-  if (active && payload && payload.length) {
+  if (active && payload && payload.length && payload[2]) {
     return (
       <div className={styles.container}>
         <p className={styles.label}>{`Sim Score: ${payload[2].value}`}</p>
         <p className={styles.desc}>{payload[2].payload.name}</p>
+      </div>
+    );
+  } else if (active && payload && payload.length) {
+    return (
+      <div className={styles.container}>
+        <p className={styles.desc}>Input Query</p>
       </div>
     );
   }
@@ -74,7 +80,7 @@ const InteractiveChart = observer(function InteractiveChart() {
           data={papers.query}
           fill={blue[300]}
         /> */}
-          {papers.query ? (
+          {/* {papers.query ? (
             <ReferenceDot
               x={papers.query.x}
               y={papers.query.y}
@@ -84,7 +90,17 @@ const InteractiveChart = observer(function InteractiveChart() {
             />
           ) : (
             <ReferenceDot x={-100} y={-100} fill={blue[300]} stroke="none" />
-          )}
+          )} */}
+          <Scatter
+            isAnimationActive={false}
+            name="query"
+            data={[papers.query]}
+            fill={blue[300]}
+            // onClick={(p) => {
+            //   // console.log(p.payload);
+            //   // papers.selectPaper(p.payload.id);
+            // }}
+          />
           <Scatter
             isAnimationActive={false}
             name="recommended"

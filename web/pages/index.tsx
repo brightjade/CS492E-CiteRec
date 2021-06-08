@@ -1,4 +1,14 @@
-import { Box, Button, Grid, makeStyles } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Grid,
+  makeStyles,
+  Paper,
+  AppBar,
+  Toolbar,
+  Typography,
+  Tooltip,
+} from "@material-ui/core";
 import { Pagination } from "@material-ui/lab";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../hooks/useStores";
@@ -10,27 +20,76 @@ import {
   PaperDetail,
   Citation,
 } from "../components";
+import { AddBox } from "@material-ui/icons";
 
-const chartStyles = makeStyles({
-  container: {
+// const chartStyles = makeStyles({
+//   container: {
+//     width: "100%",
+//     height: "100%",
+//   },
+//   selectedCitationContainer: {
+//     height: "35%",
+//     // minHeight: "fit-content",
+//     // maxHeight: "380px",
+//     overflow: "auto",
+//     margin: "10pt",
+//   },
+//   addedCitationsContainer: {
+//     height: "30%",
+//     overflowY: "scroll",
+//   },
+//   buttonContainer: {
+//     margin: "10px",
+//   },
+//   title: {
+//     flexGrow: 1,
+//   },
+//   content: { width: "100%", height: "100%" },
+// });
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
     width: "100%",
-    height: "100%",
+    height: "92vh",
   },
-  selectedCitationContainer: {
-    minHeight: "10%",
+  inputColumn: {
+    // backgroundColor: "#a87936",
   },
-  addedCitationsContainer: {
-    height: "30%",
-    overflowY: "scroll",
+  paperColumn: {
+    // backgroundColor: "#182946",
   },
-  buttonContainer: {
-    margin: "10px",
+  infoColumn: {
+    // backgroundColor: "#267827",
   },
-});
+  img: {
+    margin: "auto",
+    display: "block",
+    maxWidth: "100%",
+    maxHeight: "100%",
+  },
+  paperList: {
+    marginTop: "10px",
+    minHeight: "400px",
+    // backgroundColor: "#00f326",
+    overflow: "scroll",
+  },
+  citation: {
+    // maxHeight: "400px",
+    // overflow: "scroll",
+    // backgroundColor: "#003746",
+  },
+  detail: {
+    marginTop: "10px",
+    // backgroundColor: "#f238f1",
+  },
+  title: {
+    flexGrow: 1,
+  },
+}));
 
 const Home = observer(function Home() {
   const { ui, papers } = useStores();
-  const styles = chartStyles();
+  const classes = useStyles();
 
   // handles page change (pagination)
   const onChange = (e, page: number) => {
@@ -59,99 +118,160 @@ const Home = observer(function Home() {
   };
 
   return (
-    <Grid container>
-      <Grid item xs={3}>
-        {/* Textarea to fetch user query */}
-        <Input />
-
-        {/* Radio buttons for choosing category */}
-        <CategorySelection />
-
-        <Box component="span" display="block" m={2}>
-          <Grid container direction="row" justify="space-between">
-            <Box component="div" display="inline" pr={2}>
-              <Button
-                onClick={() => papers.clearDeselected()}
-                color="secondary"
-                variant="outlined"
-              >
-                Clear Recommendations
-              </Button>
-            </Box>
-            <Box component="div" display="inline">
-              <Button
-                onClick={() => {
-                  papers.drop();
-                  ui.setSelectedText("");
-                  ui.setLoading(false);
-                  ui.setK(30);
-                  papers.selectPaper("");
-                  papers.setPage(1);
-                }}
-                variant="outlined"
-                color="secondary"
-              >
-                Start Over
-              </Button>
-            </Box>
+    <Box height="100vh" display="flex" flexDirection="column">
+      <Box height="8vh">
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" className={classes.title}>
+              ICARUS: Interactive CitAtion Recommender with User-centered System
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </Box>
+      <Grid
+        container
+        spacing={4}
+        // justify="center"
+        // alignItems="center"
+        className={classes.paper}
+      >
+        <Grid
+          item
+          xs={3}
+          container
+          className={classes.inputColumn}
+          direction="column"
+        >
+          {/* Textarea to fetch user query */}
+          <Input />
+          {/* Radio buttons for choosing category */}
+          <CategorySelection />
+          <Box component="span" display="block" m={2}>
+            <Grid container direction="row" justify="space-between">
+              <Box component="div" display="inline" pr={2}>
+                <Tooltip
+                  enterDelay={700}
+                  title={"Clear results, but keep added and blacklisted papers"}
+                  arrow
+                >
+                  <Button
+                    onClick={() => papers.clearDeselected()}
+                    color="secondary"
+                    variant="outlined"
+                  >
+                    Clear Results
+                  </Button>
+                </Tooltip>
+              </Box>
+              <Box component="div" display="inline">
+                <Tooltip enterDelay={700} title={"Start from scratch"} arrow>
+                  <Button
+                    onClick={() => {
+                      papers.drop();
+                      ui.setSelectedText("");
+                      ui.setLoading(false);
+                      ui.setK(30);
+                      papers.selectPaper("");
+                      papers.setPage(1);
+                    }}
+                    variant="outlined"
+                    color="secondary"
+                  >
+                    Start Over
+                  </Button>
+                </Tooltip>
+              </Box>
+            </Grid>
+            <Grid container justify="flex-end">
+              <Box pt={2}>
+                {ui.loading ? (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled
+                    onClick={onRecommend}
+                  >
+                    Loading Results...
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      ui.setK(30);
+                      onRecommend();
+                    }}
+                  >
+                    Search
+                  </Button>
+                )}
+              </Box>
+            </Grid>
+          </Box>
+        </Grid>
+        <Grid
+          item
+          xs={5}
+          className={classes.paperColumn}
+          container
+          direction="column"
+        >
+          <Grid item xs className={classes.paperList}>
+            {/* <Paper className={styles.selectedCitationContainer}> */}
+            <PaperList />
+            {/* </Paper> */}
           </Grid>
 
-          <Grid container justify="flex-end">
-            <Box pt={2}>
-              {ui.loading ? (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled
-                  onClick={onRecommend}
-                >
-                  Recommending...
-                </Button>
+          <Grid item container justify="center">
+            <Box marginY={1}>
+              {papers.papers.length == 0 ? (
+                <Box></Box>
               ) : (
-                <Button
-                  variant="contained"
+                <Pagination
+                  page={papers.pageNum}
+                  count={papers.pageCount}
+                  onChange={onChange}
+                  variant="outlined"
                   color="primary"
-                  onClick={() => {
-                    ui.setK(30);
-                    onRecommend();
-                  }}
-                >
-                  Recommend
-                </Button>
+                />
               )}
             </Box>
           </Grid>
-        </Box>
+          <Grid item xs className={classes.citation}>
+            {/* <Box style={{ maxHeight: "300px", overflow: "scroll" }}> */}
+            <Citation />
+            {/* </Box> */}
+          </Grid>
+        </Grid>
+        <Grid
+          item
+          xs={4}
+          className={classes.infoColumn}
+          container
+          direction="column"
+        >
+          {papers.papers.length == 0 ? (
+            <Box></Box>
+          ) : (
+            <Box>
+              <Grid item xs>
+                <InteractiveChart />
+              </Grid>
+
+              {papers.selectedPaper == "" ? (
+                <Box></Box>
+              ) : (
+                <Grid item xs className={classes.detail}>
+                  <Paper>
+                    <PaperDetail />
+                  </Paper>
+                </Grid>
+              )}
+            </Box>
+          )}
+        </Grid>
       </Grid>
-      <Grid item xs={5}>
-        <Box height={550}>
-          <PaperList />
-        </Box>
-        <Pagination
-          page={papers.pageNum}
-          count={papers.pageCount}
-          onChange={onChange}
-          variant="outlined"
-          color="primary"
-        />
-        <Citation />
-      </Grid>
-      <Grid item xs={4}>
-        {papers.papers.length == 0 ? (
-          <Box></Box>
-        ) : (
-          <Box
-            p={2}
-            className={styles.container}
-            component="span"
-            display="block"
-          >
-            <InteractiveChart />
-            <PaperDetail />
-          </Box>
-        )}
-      </Grid>
-    </Grid>
+    </Box>
   );
 });
 

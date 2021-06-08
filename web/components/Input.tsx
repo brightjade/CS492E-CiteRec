@@ -18,7 +18,7 @@ const Input = observer(function Input(props) {
         multiline
         fullWidth
         onChange={onChange}
-        rows={8}
+        rows={10}
         variant="outlined"
       />
       {/* <Typography>{ui.selectedText}</Typography> */}

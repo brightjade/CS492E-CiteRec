@@ -16,7 +16,7 @@ const CategorySelection = observer(function Input(props) {
     ui.setCategory(category);
   };
   return (
-    <Box p={2}>
+    <Box px={2}>
       <FormControl component="fieldset">
         <FormLabel component="legend">Categories</FormLabel>
         <RadioGroup

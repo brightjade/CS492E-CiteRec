@@ -1,6 +1,14 @@
 import React from "react";
 import { makeStyles } from "@material-ui/styles";
-import { Button, Paper, Tooltip, Box } from "@material-ui/core";
+import {
+  Button,
+  Paper,
+  Tooltip,
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+} from "@material-ui/core";
 
 // import { dataGenerator } from "./generator";
 import { useStores } from "../hooks/useStores";
@@ -8,16 +16,15 @@ import { observer } from "mobx-react-lite";
 import { PaperStatus } from "../stores/PaperStore";
 
 const chartStyles = makeStyles({
-  selectedCitationContainer: {
-    minHeight: "10%",
-  },
   citationContainer: {
-    margin: "10px",
-    padding: "10px",
+    // margin: "10px",
+    maxHeight: "330px",
+    overflow: "scroll",
+    // padding: "10px",
   },
   buttonContainer: {
     margin: "10px",
-    paddingBottom: "8px",
+    // paddingBottom: "8px",
   },
 });
 
@@ -28,8 +35,10 @@ const PaperDetail = observer(function PaperDetail() {
   const selectedPaper = papers.paperById(papers.selectedPaper);
 
   return (
-    <Box p={2}>
-      <Paper className={styles.selectedCitationContainer}>
+    // <Box p={2}>
+
+    <Card>
+      <CardContent>
         {papers.selectedPaper === "" ? (
           ""
         ) : (
@@ -54,78 +63,72 @@ const PaperDetail = observer(function PaperDetail() {
             <b>Abstract:</b> {selectedPaper?.abstract}
           </div>
         )}
-        {papers.selectedPaper === "" ? (
-          ""
-        ) : selectedPaper?.status == PaperStatus.Blacklisted ? (
-          <Box
-            className={styles.buttonContainer}
-            component="span"
-            display="block"
+      </CardContent>
+      {papers.selectedPaper === "" ? (
+        ""
+      ) : selectedPaper?.status == PaperStatus.Blacklisted ? (
+        <CardActions>
+          <Tooltip
+            enterDelay={700}
+            title={
+              "Not irrelevant: This paper will re-appear in your recommendation list"
+            }
+            arrow
           >
-            <Tooltip
-              enterDelay={700}
-              title={
-                "Not irrelevant: This paper will re-appear in your recommendation list"
+            <Button
+              color="secondary"
+              onClick={() =>
+                papers.changeStatus(
+                  papers.selectedPaper,
+                  PaperStatus.Recommended
+                )
               }
-              arrow
             >
-              <Button
-                color="secondary"
-                onClick={() =>
-                  papers.changeStatus(
-                    papers.selectedPaper,
-                    PaperStatus.Recommended
-                  )
-                }
-              >
-                {"Not Irrelevant"}
-              </Button>
-            </Tooltip>
-          </Box>
-        ) : (
-          <Box
-            className={styles.buttonContainer}
-            component="span"
-            display="block"
+              {"Not Irrelevant"}
+            </Button>
+          </Tooltip>
+        </CardActions>
+      ) : (
+        <CardActions>
+          <Tooltip
+            enterDelay={700}
+            title={
+              papers.paperById(papers.selectedPaper)?.status ==
+              PaperStatus.Added
+                ? "Remove from citation list"
+                : "Add to citation list"
+            }
+            arrow
           >
-            <Tooltip
-              enterDelay={700}
-              title={
-                papers.paperById(papers.selectedPaper)?.status ==
-                PaperStatus.Added
-                  ? "Remove from citation list"
-                  : "Add to citation list"
+            <Button
+              color="primary"
+              onClick={() => papers.togglePaper(papers.selectedPaper)}
+            >
+              {selectedPaper?.status == PaperStatus.Added ? "Remove" : "Add"}
+            </Button>
+          </Tooltip>
+          <Tooltip
+            enterDelay={700}
+            title="Mark as irrelevant: This paper will show up last on your recommendation list"
+            arrow
+          >
+            <Button
+              color="secondary"
+              onClick={() =>
+                papers.changeStatus(
+                  papers.selectedPaper,
+                  PaperStatus.Blacklisted
+                )
               }
-              arrow
             >
-              <Button
-                color="primary"
-                onClick={() => papers.togglePaper(papers.selectedPaper)}
-              >
-                {selectedPaper?.status == PaperStatus.Added ? "Remove" : "Add"}
-              </Button>
-            </Tooltip>
-            <Tooltip
-              enterDelay={700}
-              title="Mark as irrelevant: This paper will show up last on your recommendation list"
-              arrow
-            >
-              <Button
-                color="secondary"
-                onClick={() =>
-                  papers.changeStatus(
-                    papers.selectedPaper,
-                    PaperStatus.Blacklisted
-                  )
-                }
-              >
-                Irrelevant
-              </Button>
-            </Tooltip>
-          </Box>
-        )}
-      </Paper>
-    </Box>
+              Irrelevant
+            </Button>
+          </Tooltip>
+        </CardActions>
+      )}
+    </Card>
+
+    // </Box>
   );
 });
 
