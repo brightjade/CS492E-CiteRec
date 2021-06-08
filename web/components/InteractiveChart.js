@@ -80,6 +80,7 @@ const InteractiveChart = observer(function InteractiveChart() {
               y={papers.query[0].y}
               fill={blue[300]}
               stroke="none"
+              label={{ value: 'query', fontSize: '8px' }}
             />
           ) : (
             <ReferenceDot x={0} y={0} fill={blue[300]} stroke="none" />

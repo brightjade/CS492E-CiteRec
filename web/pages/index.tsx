@@ -75,7 +75,7 @@ const Home = observer(function Home() {
                 color="secondary"
                 variant="outlined"
               >
-                Clear Non-Added
+                Clear Recommendations
               </Button>
             </Box>
             <Box component="div" display="inline">
@@ -124,7 +124,7 @@ const Home = observer(function Home() {
         </Box>
       </Grid>
       <Grid item xs={5}>
-        <Box height={700}>
+        <Box height={550}>
           <PaperList />
         </Box>
         <Pagination
@@ -134,6 +134,7 @@ const Home = observer(function Home() {
           variant="outlined"
           color="primary"
         />
+        <Citation />
       </Grid>
       <Grid item xs={4}>
         {papers.papers.length == 0 ? (
@@ -146,10 +147,7 @@ const Home = observer(function Home() {
             display="block"
           >
             <InteractiveChart />
-
             <PaperDetail />
-
-            <Citation />
           </Box>
         )}
       </Grid>

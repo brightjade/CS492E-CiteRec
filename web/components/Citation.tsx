@@ -9,8 +9,9 @@ import React, { useState } from "react";
 
 const chartStyles = makeStyles({
   addedCitationsContainer: {
-    overflowY: "scroll",
-    padding: "10px",
+    maxHeight: "200px",
+    overflow: "auto",
+    padding: "0px 10px",
   },
   modal: {
     display: "flex",
@@ -70,26 +71,25 @@ const Citation = observer(function Citation() {
       </Modal>
       {papers.allAddedPapers.length > 0 ? (
         <Box p={2}>
+          <h3 style={{ padding: "0px 10px" }}>References</h3>
           <Paper className={styles.addedCitationsContainer}>
             <Box p={1}>
-              {papers.toText.split("\n").map((line) => {
+              {papers.allAddedPapers.map((paper) => {
                 return (
-                  <span>
-                    {line}
-                    <br />
-                  </span>
+                  <p>{paper.authors}. <b>{paper.name}</b>, {paper.date.substring(0, 4)}.</p>
                 );
               })}
             </Box>
-            <Box component="span" display="block">
+          </Paper>
+          <Box component="span" display="block" style={{ margin: "10px 0px" }}>
               <CopyToClipboard
                 text={papers.toText}
                 onCopy={() => setCopied(true)}
               >
                 <Button color="primary"> Copy To Clipboard </Button>
               </CopyToClipboard>
-            </Box>
-          </Paper>
+              <Button variant="contained" color="primary" style={{ marginLeft: "10px" }}> Further Recommend </Button>
+          </Box>
         </Box>
       ) : (
         ""
