@@ -79,7 +79,16 @@ const PaperList = observer(function PaperList(props) {
 
       {papers.pageNum == papers.pageCount ? (
         <Grid container justify="center">
-          <Button>Load More...</Button>
+          <Button
+            disabled={ui.loading}
+            onClick={() => {
+              ui.setLoading(true);
+              ui.setK(ui.k + papers.extraPages * papers.pageSize);
+              papers.getPapers(ui);
+            }}
+          >
+            Load More...
+          </Button>
         </Grid>
       ) : (
         <Box></Box>
