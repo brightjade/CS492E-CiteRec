@@ -46,7 +46,7 @@ export class Paper {
     date: string,
     categories: string,
     abstract: string,
-    embedding,
+    embedding
   ) {
     this.store = store;
     this.status = status;
@@ -114,7 +114,7 @@ export class PaperStore {
         ui.setLoading(false);
 
         // add query
-        if (this.papers.length == 0) {
+        if (this.query === undefined) {
           this.addQuery(
             "0", // reserve ID#0 for query vector
             res.data[0].text,
@@ -149,6 +149,7 @@ export class PaperStore {
   }
 
   @action getMorePapers(ui: UIStore) {
+    this.clearDeselected();
     axios
       // .post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
       .post(`http://localhost:8080/api/further_recommend_papers`, {
@@ -159,13 +160,24 @@ export class PaperStore {
       .then((res) => {
         ui.setLoading(false);
 
+        let queryIndex = this.papers.findIndex(
+          (paper) => paper.status == PaperStatus.Query
+        );
         // add query
-        if (this.query.length == 0) {
-          this.addQuery(
-            "0", // reserve ID#0 for query vector
+        if (queryIndex != -1) {
+          this.papers[queryIndex] = new Paper(
+            this,
             res.data[0].text,
+            PaperStatus.Query,
+            "0",
             parseFloat(res.data[0].x),
             parseFloat(res.data[0].y),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
             res.data[0].embedding
           );
         }
@@ -186,7 +198,6 @@ export class PaperStore {
             dict.abstract
           );
         });
-
       })
       .catch((err) => {
         console.log(err);
@@ -210,7 +221,10 @@ export class PaperStore {
   @computed get toText() {
     return this.allAddedPapers
       .map((paper) => {
-        return `${paper.authors}. ${paper.name}, ${paper.date.substring(0, 4)}.`;
+        return `${paper.authors}. ${paper.name}, ${paper.date.substring(
+          0,
+          4
+        )}.`;
       })
       .reduce((v1, v2) => {
         return v1 + "\n\n" + v2;
@@ -258,7 +272,9 @@ export class PaperStore {
   }
 
   @computed get allRecommendedPapers() {
-    return this.paperList.filter((paper) => paper.status == PaperStatus.Recommended);
+    return this.paperList.filter(
+      (paper) => paper.status == PaperStatus.Recommended
+    );
   }
 
   @computed get recommendedPapersOnPage() {
@@ -288,7 +304,11 @@ export class PaperStore {
   }
 
   @computed get query() {
-    return this.papers.filter((paper) => paper.status == PaperStatus.Query);
+    let queryArray = this.papers.filter(
+      (paper) => paper.status == PaperStatus.Query
+    );
+    if (queryArray.length == 0) return undefined;
+    else return queryArray[0];
   }
 
   paperById(id: string) {
@@ -311,7 +331,7 @@ export class PaperStore {
       paper.date,
       paper.categories,
       paper.abstract,
-      paper.embedding,
+      paper.embedding
     );
   }
 
@@ -320,6 +340,7 @@ export class PaperStore {
       (paper) =>
         paper.status == PaperStatus.Added || paper.status == PaperStatus.Query
     );
+    this.setPage(1);
     console.log(selected);
     this.papers = selected;
   }
@@ -343,7 +364,7 @@ export class PaperStore {
         paper.date,
         paper.categories,
         paper.abstract,
-        paper.embedding,
+        paper.embedding
       );
     } else if (paper.status == PaperStatus.Recommended) {
       this.papers[paperIndex] = new Paper(
@@ -359,7 +380,7 @@ export class PaperStore {
         paper.date,
         paper.categories,
         paper.abstract,
-        paper.embedding,
+        paper.embedding
       );
     }
   }
@@ -392,7 +413,7 @@ export class PaperStore {
           date,
           categories,
           abstract,
-          embedding,
+          embedding
         )
       );
   }
@@ -412,7 +433,7 @@ export class PaperStore {
         null,
         null,
         null,
-        embedding,
+        embedding
       ),
     ];
   }

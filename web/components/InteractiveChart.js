@@ -74,13 +74,13 @@ const InteractiveChart = observer(function InteractiveChart() {
           data={papers.query}
           fill={blue[300]}
         /> */}
-          {papers.query.length > 0 ? (
+          {papers.query ? (
             <ReferenceDot
-              x={papers.query[0].x}
-              y={papers.query[0].y}
+              x={papers.query.x}
+              y={papers.query.y}
               fill={blue[300]}
               stroke="none"
-              label={{ value: 'query', fontSize: '8px' }}
+              label={{ value: "query", fontSize: "8px" }}
             />
           ) : (
             <ReferenceDot x={-100} y={-100} fill={blue[300]} stroke="none" />
