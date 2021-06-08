@@ -45,7 +45,7 @@ const Home = observer(function Home() {
 
   // handles recommendation button (API CALL)
   const onRecommend = () => {
-    console.log("recommending");
+    // console.log("recommending");
     if (ui.selectedText === "") {
       alert("You must input text for recommendations.");
     } else if (ui.selectedText.length <= 10) {

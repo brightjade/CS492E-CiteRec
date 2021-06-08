@@ -211,6 +211,10 @@ export class PaperStore {
     );
   }
 
+  @computed get allRecommendedPapers() {
+    return this.paperList.filter((paper) => paper.status == PaperStatus.Recommended);
+  }
+
   @computed get recommendedPapersOnPage() {
     return this.papersOnPage.filter(
       (paper) =>

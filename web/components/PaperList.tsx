@@ -77,7 +77,7 @@ const PaperList = observer(function PaperList(props) {
         );
       })}
 
-      {papers.pageNum == papers.pageCount ? (
+      {papers.allRecommendedPapers.length > 0 && papers.pageNum == papers.pageCount ? (
         <Grid container justify="center">
           <Button
             disabled={ui.loading}
