@@ -108,7 +108,7 @@ export class PaperStore {
   constructor() {
     makeObservable(this);
     autorun(() => {
-      console.log(this.query);
+      // console.log(this.query);
     });
   }
 
@@ -336,7 +336,7 @@ export class PaperStore {
         paper.status == PaperStatus.Blacklisted
     );
     this.setPage(1);
-    console.log(selected);
+    // console.log(selected);
     this.papers = selected;
   }
 

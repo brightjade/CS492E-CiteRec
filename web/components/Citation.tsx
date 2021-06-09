@@ -120,7 +120,6 @@ const Citation = observer(function Citation() {
                   color="primary"
                   style={{ marginLeft: "10px" }}
                   disabled
-                  onClick={onFurtherRecommend}
                 >
                   Loading Results...
                 </Button>

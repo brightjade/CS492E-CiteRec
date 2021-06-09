@@ -107,7 +107,7 @@ const InteractiveChart = observer(function InteractiveChart() {
             data={papers.recommendedPapersOnOtherPages}
             fill="#dbdbdb"
             onClick={(p) => {
-              console.log(p.payload);
+              // console.log(p.payload);
               papers.selectPaper(p.payload.id);
             }}
           />
@@ -117,7 +117,7 @@ const InteractiveChart = observer(function InteractiveChart() {
             data={papers.recommendedPapersOnPage}
             fill="#9c9c9c"
             onClick={(p) => {
-              console.log(p.payload);
+              // console.log(p.payload);
               papers.selectPaper(p.payload.id);
             }}
           />
@@ -127,7 +127,7 @@ const InteractiveChart = observer(function InteractiveChart() {
             data={papers.selectedPapers}
             fill="#1b22e0"
             onClick={(p) => {
-              console.log(p.payload);
+              // console.log(p.payload);
               papers.selectPaper(p.payload.id);
             }}
           />
@@ -137,7 +137,7 @@ const InteractiveChart = observer(function InteractiveChart() {
             data={papers.addedPapers}
             fill={green[400]}
             onClick={(p) => {
-              console.log(p.payload);
+              // console.log(p.payload);
               papers.selectPaper(p.payload.id);
             }}
           />
@@ -147,7 +147,7 @@ const InteractiveChart = observer(function InteractiveChart() {
             data={papers.blacklistedPapers}
             fill={red[400]}
             onClick={(p) => {
-              console.log(p.payload);
+              // console.log(p.payload);
               papers.selectPaper(p.payload.id);
             }}
           />
