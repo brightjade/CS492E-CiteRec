@@ -160,7 +160,7 @@ export class PaperStore {
   @action getMorePapers(ui: UIStore) {
     this.clearDeselected();
     axios
-      // .post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/recommend_papers`, {
+      // .post(`http://icarus-env.eba-ypad3uwi.us-east-2.elasticbeanstalk.com/api/further_recommend_papers`, {
       .post(`http://localhost:8080/api/further_recommend_papers`, {
         addedVectors: this.allAddedPapers.map((paper) => paper.embedding),
         category: ui.category,
