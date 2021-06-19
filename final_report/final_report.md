@@ -23,11 +23,17 @@
 
 ### Seokhun Jeong
 
->
+> I intentionally did the project with people I didn't know, because as an AI novice, I wanted to interact with people who had expertise in AI and learn more about AI. Initially, I felt that we had very different thought processes - for instance, while we were preparing for the pitch Jungsoo and Minseok mainly focused on the model and performance while I valued the problem statement, storyline and interaction. This was actually very natural, considering how research in each field is conducted, but I had to be the one to keep giving ideas about improving the storyline and interactions. However, during the course of the project our goals started to align a lot better. Towards the final presentation, I found Jungsoo and Minseok caring a lot more about interaction and the overall storyline, and prepare the final presentation quite thoroughly while I worked on the final touches of the interface. While I can’t say I’m the one to thank, I feel we all learned something through interacting with people from other areas.
+
+> Regarding implementation, I thought the teamwork was near perfect. We all had different experience and expertise in implementation, and we built our interface by doing rapid iterations to quickly build a basic interface and continue improving it. Jungsoo quickly developed the base model so that we could start designing the interactions. I bootstrapped the front-end and Minseok connected the model to an API and to the front-end chart component. With this connection in place, our rapid iteration processes were extremely efficient: I mainly improved interactions and explanations, fixed issues and improved the overall user experience, and Jungsoo improved the model. Minseok acted as the glue: he was skilled in both front-end and AI implementation so he could work with me in the front-end and also implement the ‘refined search’ feature that required work in both the model and the front-end. Overall, I really enjoyed working with Minseok and Jungsoo and was extremely satisfied with the final outcome.
+
+> The only downside in our teamwork during implementation was that since work was divided so naturally and efficiently, and we all had our hands full with our work, we didn’t have the time to learn or thoroughly understand each other’s work. I can’t really say I succeeded to meet my initial goal of learning more about AI implementation during the project. 
+
+> However, through our project I learned that there are problems that interaction alone cannot solve and requires other types of models or higher performance. While I think the interactions that we designed were quite useful and could make up for parts where the model wasn’t performant enough, our user study showed that there were still too many recommendations that felt irrelevant. 
 
 ### Jungsoo Lee
 
->
+> 
 
 ### Minseok Choi
 
