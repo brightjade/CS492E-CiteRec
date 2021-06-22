@@ -6,7 +6,15 @@
 
 ## Evaluation
 
->
+> We evaluated ICARUS by running a user study with five graduate students in a lab (4 Master’s and 1 Ph.D candidate) who have experience of writing research paper for at least one year. After giving a short instruction of how ICARUS works, we asked them to explore ICARUS freely and give feedback and general impressions about it. For the post survey, we asked three questions: Q1) Illustrate general impression, pros/cons, feed backs, further improvements of ICARUS, Q2) What kind of recommendation did you feel helpful?, and Q3) If ICARUS is plugged in overleaf or any writing tool you are using, would you use it? It took an average of thirty minutes for running a user study.
+
+> For evaluation, we first conducted NASA-TLX which finds the overall demand when using an interface. Although there were five participants, we tried to find out if ICARUS imposes high mental demand or frustration level. It turned out that the average scores of mental demand and the frustration level were under 2, indicating that ICARUS is fairly easy and straightforward to use. 
+
+> We report the pros and cons that participants pointed out in the post survey as the qualitative analysis. For the pros, all participants replied that ICARUS is easy to use and has a straightforward design. One participant replied that he liked how ICARUS integrated the 2D visualization view (P2). Also, P4 noted that refined search was useful and novel. On the other side of the coin, two participants (P1, P5) pointed out the failure cases of recommendations were somehow disappointing. “At least, I expect that the titles include the query” (P1). Additionally, three participants (P2, P3, P4) stressed that the recommendation view should have included the metadata such as conference, title, and year. Lastly, four participants replied that they will use ICARUS if it is plugged in the text editor they are using such as Overleaf. 
+
+> We also received further suggestions to improve ICARUS. P1 noted that the connectivity between papers is important when finding the paper. “Citation information between papers should be considered to express the connectivity between the papers.” Another fruitful suggestion from P1 was that weighting the attention of words could improve the recommendation quality. “Giving more weights to the query keywords (e.g. interactive segmentation) is needed to find more relevant papers.” This is a reasonable feedback since most of the state-of-the-art language models utilize attention mechanisms in their model. We believe including such feature would enhance the recommendation quality of ICARUS. 
+
+> What we learned from evaluating ICARUS is that users actively used 2D projection view when exploring papers. Also, users considered the metadata such as conference or year important when choosing the recommendation. Additionally, we were delighted that users said that the refining feature actually improved the quality of the recommendation. Refining the query via human interaction is the collaboration of the language model and the user’s taste. The fact that users liked this feature demonstrates that we built a system which actively utilizes the collaboration of human and AI. 
 
 ## Discussion
 
@@ -33,7 +41,9 @@
 
 ### Jungsoo Lee
 
-> 
+> I was lucky to work with my wonderful teammates who had strong coding/communication skills. Minseok was at the core of our work who integrated the front-end and back-end of ICARUS. Seokhun had strong coding skills at building the front-end of ICARUS and gave various suggestions for the views in ICARUS. I deployed the pretrained language models in order to extract the features from abstracts and used them for 2D visualization. I really liked how my teammates compensated the parts that I could think while we had discussions. For example, I tend to think about the model implementation part when conceiving a new feature. However, Seokhun and Minseok point out the impacts on the front-end side which I could never think of. Also, we all had different abilities, so we compensated each other in the coding part too. One thing that could have been better is that we only discussed online which somehow limited our discussion. Though, it was a great experience to work with the two members.
+
+> Through the course, I learned that human interaction is more complicated than I thought. Since I have a strong background at AI, I normally think about the test accuracy or any kind of performance that we can measure for a model. However, during the course, I had to think how humans react to a certain feature which was far more complicated than I expected and it opened my perspectives. I will take this as the cornerstone and think about various aspects when building a model including the human’s perspective.
 
 ### Minseok Choi
 
