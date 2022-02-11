@@ -1,6 +1,34 @@
-# CS492E-CiteRec
+# ICARUS (Interactive CitAtion Recommendation with User-centered System)
 
-## ICARUS (Interactive CitAtion Recommendation with User-centered System)
+![project-overview](final_report/refinedSearchBefore.png)
+
+*This project was done while taking a CS492E course (Human-AI Interaction) at KAIST.*
+
+### Project Demo
+
+- <https://youtu.be/oPSjkUIt2ww>
+
+### Project Summary
+
+With a substantial number of papers released every year, researchers are having a difficult time trying to find papers related to their own writing. We propose ICARUS (Interactive CitAtion Recommendation with User-centered System), which recommends academic papers that may be helpful for researchers to refer to and perhaps cite them in their own paper. The unique approach of ICARUS is that users can interactively explore semantically similar papers via 2D projection and refine the recommendations based on their own taste.
+
+### Libraries and Frameworks
+
+- Frontend
+
+  - [React](https://reactjs.org/)
+  - [Next.js](https://nextjs.org/)
+  - [MobX](https://mobx.js.org/README.html)
+  - [Material-UI](https://material-ui.com/)
+  - [Recharts](https://recharts.org/)
+
+- Backend
+  - [Flask](https://flask.palletsprojects.com/en/2.0.x/)
+  - [Scikit-Learn](https://scikit-learn.org/stable/)
+  - [PyTorch](https://pytorch.org/)
+  - [Huggingface Transformers](https://huggingface.co/)
+
+### Project Structure
 
 The project structure is as follows:
 
